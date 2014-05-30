@@ -9,6 +9,7 @@ package editor.domain;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.List;
 
 /**
  *
@@ -48,6 +49,11 @@ public class Grid implements IDrawable {
     @Override
     public IDrawable checkSelection(int mouseX, int mouseY, boolean multiSelect) {
         return null;
+    }    
+    
+    @Override
+    public List<IDrawable> checkSelection(int mouseX, int mouseY, int width, int height, boolean multiSelect) {
+        return null;
     }
 
     public void setSpacing(int spacing) {
@@ -61,4 +67,5 @@ public class Grid implements IDrawable {
     public void setScreenHeight(int screenHeight) {
         this.screenHeight = screenHeight;
     }
+
 }

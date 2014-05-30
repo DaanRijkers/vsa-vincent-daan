@@ -8,6 +8,7 @@ package editor.domain;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  *
@@ -57,6 +58,11 @@ public class Line implements IDrawable, Serializable {
             
         }
         
+        return null;
+    }    
+    
+    @Override
+    public List<IDrawable> checkSelection(int mouseX, int mouseY, int width, int height, boolean multiSelect) {
         return null;
     }
 

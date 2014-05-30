@@ -7,6 +7,7 @@
 package editor.domain;
 
 import java.awt.Graphics2D;
+import java.util.List;
 
 /**
  *
@@ -17,5 +18,10 @@ public interface IDrawable {
     public void draw(Graphics2D g, double scale);
     
     public IDrawable checkSelection(int mouseX, int mouseY, boolean multiSelect);
+    
+    public List<IDrawable> checkSelection(int mouseX, int mouseY, 
+                                          int width, int height, boolean multiSelect);
+    
+    
     
 }
