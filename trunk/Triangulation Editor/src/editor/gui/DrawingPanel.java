@@ -74,9 +74,9 @@ public class DrawingPanel extends javax.swing.JPanel {
                 createMouseLine(e);
             }
         });
-        
+
         this.addComponentListener(new ComponentAdapter() {
-            
+
             @Override
             public void componentResized(ComponentEvent e) {
                 grid = new Grid(25, e.getComponent().getWidth(), e.getComponent().getHeight());
@@ -87,7 +87,7 @@ public class DrawingPanel extends javax.swing.JPanel {
     @Override
     public void paint(Graphics g) {
         super.paintComponents(g);
-        
+
         // Draw gridlines
         if (showGrid) {
             if (grid == null) {
@@ -95,7 +95,7 @@ public class DrawingPanel extends javax.swing.JPanel {
             }
             grid.draw((Graphics2D) g, scale);
         }
-        
+
         // Draw upper borderline
         g.setColor(Color.BLACK);
         g.drawLine(0, 0, this.getWidth(), 0);
@@ -110,8 +110,8 @@ public class DrawingPanel extends javax.swing.JPanel {
             te.getPolygon().draw((Graphics2D) g, scale);
         }
     }
-    
-    public void refresh(){
+
+    public void refresh() {
         this.getGraphics().clearRect(0, 0, this.getWidth(), this.getHeight());
         this.update(this.getGraphics());
     }
@@ -133,9 +133,9 @@ public class DrawingPanel extends javax.swing.JPanel {
         if (connectPoint == null || !(connectPoint instanceof Point)) {
             te.getPolygon().addPoint(evt.getX(), evt.getY());
         } else {
-            int reply = JOptionPane.showConfirmDialog(this, 
-                    "Do you want to connect the segment to this point?", 
-                    "Connect segments", 
+            int reply = JOptionPane.showConfirmDialog(this,
+                    "Do you want to connect the segment to this point?",
+                    "Connect segments",
                     JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
                 te.getPolygon().connectSegment((Point) connectPoint);
@@ -189,13 +189,17 @@ public class DrawingPanel extends javax.swing.JPanel {
     }
 
     void zoomIn() {
-        this.scale *= 2;
-        refresh();
+        if (this.scale < 8) {
+            this.scale *= 2;
+            refresh();
+        }
     }
 
     public void zoomOut() {
-        this.scale /= 2;
-        refresh();
+        if (this.scale > 0.25) {
+            this.scale /= 2;
+            refresh();
+        }
     }
 
     public void setTriangulationEditor(TriangulationService te) {
@@ -248,10 +252,10 @@ public class DrawingPanel extends javax.swing.JPanel {
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
         if (mode == Mode.DRAW) {
             mouseClickDrawMode(evt);
-            
+
         } else if (mode == Mode.SELECT) {
             mouseClickSelectMode(evt);
-            
+
         } else if (mode == Mode.LINE) {
             mouseClickLineMode(evt);
         }
