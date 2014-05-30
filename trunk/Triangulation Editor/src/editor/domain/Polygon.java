@@ -51,10 +51,7 @@ public class Polygon implements IDrawable, Serializable {
         Point startPoint = getLineStartPoint();
 
         if (startPoint != p && countLines(p) < 2 && !checkDoubleLine(startPoint, p)) {
-            System.out.println("CONNECTED");
             lines.add(new Line(startPoint, p, Line.OUTER_SEGMENT));
-        } else {
-            System.out.println("NOT CONNECTED");
         }
     }
     

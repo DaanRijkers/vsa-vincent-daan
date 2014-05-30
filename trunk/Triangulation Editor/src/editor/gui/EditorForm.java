@@ -325,19 +325,21 @@ public class EditorForm extends javax.swing.JFrame {
 
     private void menuFileNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileNewActionPerformed
         te.setPolygon(new Polygon());
+        FileHandler.clearOpenedFile();
         panelGrid.refresh();
     }//GEN-LAST:event_menuFileNewActionPerformed
 
     private void menuFileOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileOpenActionPerformed
         te.setPolygon(FileHandler.readFromFile());
+        panelGrid.refresh();
     }//GEN-LAST:event_menuFileOpenActionPerformed
 
     private void menuFileSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileSaveActionPerformed
-        FileHandler.writeToFile(te.getPolygon());
+        FileHandler.writeToFile(te.getPolygon(), false);
     }//GEN-LAST:event_menuFileSaveActionPerformed
 
     private void menuFileSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileSaveAsActionPerformed
-        FileHandler.writeToFile(te.getPolygon());
+        FileHandler.writeToFile(te.getPolygon(), true);
     }//GEN-LAST:event_menuFileSaveAsActionPerformed
 
     private void menuEditSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditSelectActionPerformed
@@ -345,11 +347,13 @@ public class EditorForm extends javax.swing.JFrame {
     }//GEN-LAST:event_menuEditSelectActionPerformed
 
     private void menuEditDeselectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditDeselectActionPerformed
-        // TODO add your handling code here:
+        te.getPolygon().clearSelection();
+        panelGrid.refresh();
     }//GEN-LAST:event_menuEditDeselectActionPerformed
 
     private void menuEditDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditDeleteActionPerformed
-        // TODO add your handling code here:
+        te.setPolygon(new Polygon());
+        panelGrid.refresh();
     }//GEN-LAST:event_menuEditDeleteActionPerformed
 
     private void menuFileHoriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileHoriActionPerformed

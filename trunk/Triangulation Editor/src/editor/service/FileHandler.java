@@ -24,6 +24,10 @@ public class FileHandler {
 
     private static File openedFile = null;
 
+    public static void clearOpenedFile() {
+        openedFile = null;
+    }
+    
     public static Polygon readFromFile() {
         openedFile = getOpenFile();
         
@@ -52,14 +56,14 @@ public class FileHandler {
 
     }
 
-    public static void writeToFile(Polygon p) {
-        if (openedFile == null) {
+    public static void writeToFile(Polygon p, boolean saveAs) {
+        if (openedFile == null || saveAs) {
             openedFile = getSaveFile();
         }
 
         ObjectOutputStream oos = null;
         try {
-            FileOutputStream fout = new FileOutputStream("C:\\Users\\Daan\\Desktop\\TestPolygon.pol"); // openedFile.getAbsolutePath());
+            FileOutputStream fout = new FileOutputStream(openedFile.getAbsolutePath());//"C:\\Users\\Daan\\Desktop\\TestPolygon.pol"); // 
             oos = new ObjectOutputStream(fout);
 
             oos.writeObject(p);
@@ -81,8 +85,6 @@ public class FileHandler {
         int returnVal = fc.showSaveDialog(null);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
-            //This is where a real application would save the file.
-            System.out.println("Saving: " + file.getName());
             return file;
         }
         return null;
