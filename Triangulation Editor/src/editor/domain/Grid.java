@@ -37,12 +37,17 @@ public class Grid implements IDrawable {
     @Override
     public void draw(Graphics2D g, double scale) {
         g.setColor(Color.LIGHT_GRAY);
-
-        for (int i = (int)(spacing * scale); i < screenWidth; i += (spacing * scale)) {            
-            g.drawLine(i, 0, i, screenHeight);
+        
+        // Vertical lines
+        for (double i = (spacing * scale); i < screenWidth; i += (spacing * scale)) {            
+            g.drawLine((int)i, 0, (int)i, screenHeight);
+            g.drawString(String.valueOf(((int)(i / scale))), (int)i - (g.getFont().getSize() / 2), g.getFont().getSize());
         }
-        for (int i = (int)(spacing * scale); i < screenHeight; i += (spacing * scale)) {
-            g.drawLine(0, i, screenWidth, i);
+        
+        // Horizontal lines
+        for (double i = (spacing * scale); i < screenHeight; i += (spacing * scale)) {
+            g.drawLine(0, (int)i, screenWidth, (int)i);
+            g.drawString(String.valueOf((int)(i / scale)), 1, (int)i + (g.getFont().getSize() / 2) - 1);
         }
     }
     
