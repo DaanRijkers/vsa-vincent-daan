@@ -6,6 +6,7 @@
 package editor.gui;
 
 import editor.domain.Mode;
+import editor.domain.Polygon;
 import editor.service.FileHandler;
 import editor.service.TriangulationService;
 import java.awt.KeyEventDispatcher;
@@ -323,7 +324,8 @@ public class EditorForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void menuFileNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileNewActionPerformed
-        // TODO add your handling code here:
+        te.setPolygon(new Polygon());
+        panelGrid.refresh();
     }//GEN-LAST:event_menuFileNewActionPerformed
 
     private void menuFileOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileOpenActionPerformed
