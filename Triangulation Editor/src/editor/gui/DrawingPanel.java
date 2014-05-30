@@ -128,6 +128,8 @@ public class DrawingPanel extends javax.swing.JPanel {
     }
 
     private void mouseClickDrawMode(java.awt.event.MouseEvent evt) {
+   
+        System.out.println((int)0.9);
         IDrawable connectPoint = te.getPolygon().checkSelection(evt.getX(), evt.getY(), false);
 
         if (connectPoint == null || !(connectPoint instanceof Point)) {
