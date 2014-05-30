@@ -53,7 +53,7 @@ public class Grid implements IDrawable {
         for (double i = (spacing * scale); i < screenHeight; i += (spacing * scale)) {
             g.drawLine(0, (int) i, screenWidth, (int) i);
 
-            System.out.println((int) i);
+            //System.out.println((int) i);
             counter++;
             if (scale > 0.5 || counter == 3) {
                 g.drawString(String.valueOf((int) (i / scale)), 1, (int) i + (g.getFont().getSize() / 2) - 1);
@@ -74,6 +74,10 @@ public class Grid implements IDrawable {
 
     public void setSpacing(int spacing) {
         this.spacing = spacing;
+    }
+
+    public int getSpacing() {
+        return spacing;
     }
 
     public void setScreenWidth(int screenWidth) {
