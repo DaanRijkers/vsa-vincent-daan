@@ -128,14 +128,12 @@ public class DrawingPanel extends javax.swing.JPanel {
     }
 private int roundToSpacing(int coordinate){
         double modulo = (coordinate % (grid.getSpacing() * scale));
-        System.out.println("-----");
-        System.out.println("modulo: " + modulo);
         int base = (int)((coordinate - modulo)/ (grid.getSpacing() * scale));
-        System.out.println("base: " + base);
+        
         if(modulo > (grid.getSpacing() * scale / 2)) {
             base++;
         }
-        System.out.println("final: " + (int)(base * grid.getSpacing() * scale));
+        
         return (int)(base * grid.getSpacing() * scale);
     }
     
@@ -146,7 +144,7 @@ private int roundToSpacing(int coordinate){
             x = roundToSpacing(x);
             y = roundToSpacing(y);
         }
-        System.out.println((int)0.9);
+        
         IDrawable connectPoint = te.getPolygon().checkSelection(x, y, false);
 
         if (connectPoint == null || !(connectPoint instanceof Point)) {
