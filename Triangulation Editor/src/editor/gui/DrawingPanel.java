@@ -138,10 +138,7 @@ public class DrawingPanel extends javax.swing.JPanel {
                     "Connect segments", 
                     JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
-                System.out.println("connecting");
                 te.getPolygon().connectSegment((Point) connectPoint);
-            } else {
-                System.out.println("not connecting");
             }
         }
         te.getPolygon().clearSelection();
