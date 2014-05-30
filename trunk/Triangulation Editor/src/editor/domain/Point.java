@@ -18,19 +18,22 @@ import java.util.List;
 public class Point implements IDrawable, Serializable {
 
     private static final Color NORMAL_COLOR = Color.RED;
-    private static final Color SELECTED_COLOR = Color.ORANGE;
-    
+    private static final Color SELECTED_COLOR = Color.BLUE;
+    private static final Color HIGHLIGHTED_COLOR = Color.GREEN;
+
     private int x;
-    private int y;    
+    private int y;
     private int size;
-    
+
     private boolean selected;
+    private boolean highlighted;
 
     public Point() {
         this.x = 0;
         this.y = 0;
         this.size = 10;
         this.selected = false;
+        this.highlighted = false;
     }
 
     public Point(int x, int y) {
@@ -38,32 +41,33 @@ public class Point implements IDrawable, Serializable {
         this.y = y;
         this.size = 10;
         this.selected = false;
+        this.highlighted = false;
     }
-    
+
     @Override
     public void draw(Graphics2D g, double scale) {
-        g.setColor((selected) ? SELECTED_COLOR : NORMAL_COLOR);
-        
+        g.setColor((selected) ? SELECTED_COLOR : (highlighted) ? HIGHLIGHTED_COLOR : NORMAL_COLOR);
+
         Ellipse2D.Double circle = new Ellipse2D.Double(x - 5, y - 5, size, size);
         g.fill(circle);
     }
-    
+
     @Override
     public IDrawable checkSelection(int mouseX, int mouseY, boolean multiSelect) {
         if (this.selected == true && multiSelect == true) {
             return this;
         }
-        
-        if (((x - 5) < mouseX && mouseX < (x + 5)) && 
-                ((y - 5) < mouseY && mouseY < (y + 5))) {
+
+        if (((x - 5) < mouseX && mouseX < (x + 5))
+                && ((y - 5) < mouseY && mouseY < (y + 5))) {
             this.selected = true;
             return this;
         } else {
-            this.selected = false;            
+            this.selected = false;
             return null;
         }
     }
-        
+
     @Override
     public List<IDrawable> checkSelection(int mouseX, int mouseY, int width, int height, boolean multiSelect) {
         return null;
@@ -93,5 +97,11 @@ public class Point implements IDrawable, Serializable {
         this.selected = selected;
     }
 
-    
+    public boolean isHighlighted() {
+        return highlighted;
+    }
+
+    public void setHighlighted(boolean highlighted) {
+        this.highlighted = highlighted;
+    }
 }

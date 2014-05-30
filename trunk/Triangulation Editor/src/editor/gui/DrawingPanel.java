@@ -52,7 +52,7 @@ public class DrawingPanel extends javax.swing.JPanel {
     }
 
     public void initValues() {
-        this.showGrid = false;
+        this.showGrid = true;
         this.stickGrid = false;
         this.fillShapes = false;
         this.multiSelect = false;

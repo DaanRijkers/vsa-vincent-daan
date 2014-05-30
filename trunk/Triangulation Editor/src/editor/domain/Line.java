@@ -17,7 +17,7 @@ import java.util.List;
 public class Line implements IDrawable, Serializable {
     
     private static final Color NORMAL_COLOR = Color.RED;
-    private static final Color SELECTED_COLOR = Color.ORANGE;
+    private static final Color SELECTED_COLOR = Color.BLUE;
     
     public static final int OUTER_SEGMENT = 0;
     public static final int INNER_SEGMENT = 1;
