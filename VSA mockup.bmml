@@ -1,0 +1,112 @@
+<mockup version="1.0" skin="wireframe" fontFace="Balsamiq Sans" measuredW="886" measuredH="540" mockupW="850" mockupH="525">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::TitleWindow" x="36" y="15" w="850" h="525" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Triangulation%20editor</text>
+      </controlProperties>
+    </control>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::HRule" x="36" y="64" w="850" h="-1" measuredW="100" measuredH="10" zOrder="1" locked="false" isInGroup="-1"/>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::Accordion" x="36" y="41" w="194" h="145" measuredW="189" measuredH="225" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <selectedIndex>0</selectedIndex>
+        <text>File%0A-%20New%09%09Ctrl+N%0A-%20Save%09%09Ctrl+S%0A-%20Save%20as...%09Ctrl+Shift+S%0A-%20Open%20file%09Ctrl+O</text>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::Accordion" x="230" y="41" w="189" h="145" measuredW="189" measuredH="225" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Edit%0A-%20Select%20all%09%20%20%20%20%20Ctrl+A%0A-%20Delete%20all%09%20%20%20%20%20Ctrl+DEL%0A-%20Flip%20horizontally%20%20%20%20%20%0A-%20Flip%20vertically%20%20%20%20%20%20%20%20%20</text>
+      </controlProperties>
+    </control>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::Accordion" x="419" y="41" w="150" h="182" measuredW="150" measuredH="254" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>View%0A-%20Show%20grid%20%20%20%20%20V%0A-%20Show%20scale%20%20%20V%0A-%20Zoom%0A-%20-%20Zoom%20in%20%20%20%20%20+%0A-%20-%20Zoom%20out%20%20%20-</text>
+      </controlProperties>
+    </control>
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::Accordion" x="569" y="41" w="150" h="118" measuredW="150" measuredH="196" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Tools%0A-%20Autotriangulate%20V%0A-%20Fill%20triangles%20%20%20%20%20%20V%0A-%20Stick%20to%20grid%20%20%20%20%20%20V</text>
+      </controlProperties>
+    </control>
+    <control controlID="8" controlTypeID="com.balsamiq.mockups::Canvas" x="42" y="74" w="838" h="439" measuredW="100" measuredH="70" zOrder="2" locked="false" isInGroup="-1"/>
+    <control controlID="9" controlTypeID="com.balsamiq.mockups::RoundButton" x="105" y="339" w="11" h="10" measuredW="32" measuredH="32" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%20</text>
+      </controlProperties>
+    </control>
+    <control controlID="10" controlTypeID="com.balsamiq.mockups::RoundButton" x="157" y="237" w="11" h="10" measuredW="32" measuredH="32" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%20</text>
+      </controlProperties>
+    </control>
+    <control controlID="11" controlTypeID="com.balsamiq.mockups::RoundButton" x="196" y="415" w="11" h="10" measuredW="32" measuredH="32" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%20</text>
+      </controlProperties>
+    </control>
+    <control controlID="12" controlTypeID="com.balsamiq.mockups::RoundButton" x="331" y="288" w="11" h="10" measuredW="32" measuredH="32" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%20</text>
+      </controlProperties>
+    </control>
+    <control controlID="13" controlTypeID="com.balsamiq.mockups::Arrow" x="168" y="237" w="163" h="51" measuredW="150" measuredH="100" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <curvature>0</curvature>
+        <leftArrow>false</leftArrow>
+        <rightArrow>false</rightArrow>
+        <text/>
+      </controlProperties>
+    </control>
+    <control controlID="14" controlTypeID="com.balsamiq.mockups::Arrow" x="116" y="349" w="80" h="66" measuredW="150" measuredH="100" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <curvature>0</curvature>
+        <leftArrow>false</leftArrow>
+        <rightArrow>false</rightArrow>
+        <text/>
+      </controlProperties>
+    </control>
+    <control controlID="15" controlTypeID="com.balsamiq.mockups::Arrow" x="105" y="247" w="52" h="92" measuredW="150" measuredH="100" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <backgroundAlpha>1</backgroundAlpha>
+        <curvature>0</curvature>
+        <direction>bottom</direction>
+        <leftArrow>false</leftArrow>
+        <rightArrow>false</rightArrow>
+        <text/>
+      </controlProperties>
+    </control>
+    <control controlID="16" controlTypeID="com.balsamiq.mockups::Arrow" x="207" y="298" w="124" h="117" measuredW="150" measuredH="100" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <backgroundAlpha>1</backgroundAlpha>
+        <curvature>0</curvature>
+        <direction>bottom</direction>
+        <leftArrow>false</leftArrow>
+        <rightArrow>false</rightArrow>
+        <text/>
+      </controlProperties>
+    </control>
+    <control controlID="17" controlTypeID="com.balsamiq.mockups::Arrow" x="168" y="247" w="39" h="168" measuredW="150" measuredH="100" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <curvature>0</curvature>
+        <leftArrow>false</leftArrow>
+        <rightArrow>false</rightArrow>
+        <stroke>dashed</stroke>
+        <text/>
+      </controlProperties>
+    </control>
+    <control controlID="18" controlTypeID="com.balsamiq.mockups::StickyNote" x="384" y="299" w="241" h="205" measuredW="109" measuredH="123" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Editing%20polygons%3A%0A%20%0AYou%20can%20add%20points%20by%20clicking%20somewhere%20on%20the%20drawing%20pane%20while%20in%20%27Add%20mode%27.%20%0AExisting%20points%20can%20be%20selected%20in%20%27Select%20mode%27%20and%20can%20be%20deleted/moved%20afterwards.%20%0ALines%20between%20points%20can%20be%20drawn%20in%20%27Line%20mode%27.%20</text>
+      </controlProperties>
+    </control>
+    <control controlID="19" controlTypeID="com.balsamiq.mockups::StickyNote" x="647" y="256" w="194" h="242" measuredW="109" measuredH="123" zOrder="17" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Editing%20triangulations%3A%0A%20%0AManual%20triangulation%3A%20%0AAfter%20completing%20a%20polygon%2C%20you%20can%20add%20triangulation-lines%20by%20selecting%20two%20points%20%28while%20in%20line%20mode%29.%0AThese%20lines%20can%20be%20deleted%20by%20selecting%20them%20and%20pressing%20the%20delete%20button.%20%0A%20%0AAutomatic%20triangulation%3A%0AA%20constructed%20polygon%20will%20be%20automaticly%20filled%20with%20triangulationlines.%20</text>
+      </controlProperties>
+    </control>
+    <control controlID="22" controlTypeID="com.balsamiq.mockups::ButtonBar" x="42" y="202" w="-1" h="-1" measuredW="268" measuredH="21" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Add%20mode%2C%20Select%20mode%2C%20Line%20mode</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
