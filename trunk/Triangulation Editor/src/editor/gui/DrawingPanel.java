@@ -110,6 +110,11 @@ public class DrawingPanel extends javax.swing.JPanel {
             te.getPolygon().draw((Graphics2D) g, scale);
         }
     }
+    
+    public void refresh(){
+        this.getGraphics().clearRect(0, 0, this.getWidth(), this.getHeight());
+        this.update(this.getGraphics());
+    }
 
     private void createMouseLine(MouseEvent e) {
 //        if (mouseLine.getStartPoint() == null) {
@@ -156,8 +161,7 @@ public class DrawingPanel extends javax.swing.JPanel {
     // <editor-fold desc="All getter & setter methods are placed within">
     public void switchShowGrid() {
         this.showGrid = !this.showGrid;
-        this.getGraphics().clearRect(0, 0, this.getWidth(), this.getHeight());
-        this.update(this.getGraphics());
+        refresh();
     }
 
     public void switchStickGrid() {
@@ -166,8 +170,7 @@ public class DrawingPanel extends javax.swing.JPanel {
 
     public void switchFillShapes() {
         this.fillShapes = !this.fillShapes;
-        this.getGraphics().clearRect(0, 0, this.getWidth(), this.getHeight());
-        this.update(this.getGraphics());
+        refresh();
     }
 
     public void setShowGrid(boolean showGrid) {
@@ -190,14 +193,12 @@ public class DrawingPanel extends javax.swing.JPanel {
 
     void zoomIn() {
         this.scale *= 2;
-        this.getGraphics().clearRect(0, 0, this.getWidth(), this.getHeight());
-        this.update(this.getGraphics());
+        refresh();
     }
 
     public void zoomOut() {
         this.scale /= 2;
-        this.getGraphics().clearRect(0, 0, this.getWidth(), this.getHeight());
-        this.update(this.getGraphics());
+        refresh();
     }
 
     public void setTriangulationEditor(TriangulationService te) {
@@ -266,8 +267,7 @@ public class DrawingPanel extends javax.swing.JPanel {
         // Check if pressed key is 'delete'
         if (evt.getKeyCode() == 127 && mode == Mode.SELECT) {
             te.getPolygon().deleteSelectedItems();
-            this.getGraphics().clearRect(0, 0, this.getWidth(), this.getHeight());
-            this.update(this.getGraphics());
+            refresh();
             //this.repaint();
         }
     }//GEN-LAST:event_formKeyPressed
