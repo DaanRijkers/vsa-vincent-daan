@@ -236,6 +236,7 @@ public class EditorForm extends javax.swing.JFrame {
         menuView.setText("View");
 
         menuViewGrid.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
+        menuViewGrid.setSelected(true);
         menuViewGrid.setText("Show grid");
         menuViewGrid.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
