@@ -15,6 +15,7 @@ import java.io.ObjectOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -42,7 +43,9 @@ public class FileHandler {
 
             return (Polygon) ois.readObject();
         } catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "File does not contain polygon.");
+            openedFile = null;
+            
         } finally {
             try {
                 if (ois != null)

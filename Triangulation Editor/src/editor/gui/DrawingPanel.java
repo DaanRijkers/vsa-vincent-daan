@@ -106,7 +106,7 @@ public class DrawingPanel extends javax.swing.JPanel {
         }
 
         // Draw polygon
-        if (te != null) {
+        if (te != null && te.getPolygon() != null) {
             te.getPolygon().draw((Graphics2D) g, scale);
         }
     }
