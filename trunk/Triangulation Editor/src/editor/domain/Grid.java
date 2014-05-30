@@ -40,7 +40,7 @@ public class Grid implements IDrawable {
         // Vertical lines
         for (double i = (spacing * scale); i < screenWidth; i += (spacing * scale)) {
             g.drawLine((int) i, 0, (int) i, screenHeight);
-
+            
             counter++;
             if (scale > 0.5 || counter == 3) {
                 g.drawString(String.valueOf(((int) (i / scale))), (int) i - (g.getFont().getSize() / 2), g.getFont().getSize());
@@ -53,6 +53,7 @@ public class Grid implements IDrawable {
         for (double i = (spacing * scale); i < screenHeight; i += (spacing * scale)) {
             g.drawLine(0, (int) i, screenWidth, (int) i);
 
+            System.out.println((int) i);
             counter++;
             if (scale > 0.5 || counter == 3) {
                 g.drawString(String.valueOf((int) (i / scale)), 1, (int) i + (g.getFont().getSize() / 2) - 1);
