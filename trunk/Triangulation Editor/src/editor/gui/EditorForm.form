@@ -232,6 +232,8 @@
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="btnSelect" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
+              <Component id="lblCoordinates" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
           <Component id="panelGrid" alignment="0" max="32767" attributes="0"/>
       </Group>
@@ -244,6 +246,7 @@
                   <Component id="btnDraw" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnSelect" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnLine" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblCoordinates" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="panelGrid" pref="504" max="32767" attributes="0"/>
@@ -277,6 +280,14 @@
       </Events>
     </Component>
     <Component class="editor.gui.DrawingPanel" name="panelGrid">
+      <Events>
+        <EventHandler event="mouseMoved" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="panelGridMouseMoved"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblCoordinates">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="x:- y:-"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

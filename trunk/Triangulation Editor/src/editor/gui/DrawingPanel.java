@@ -126,14 +126,31 @@ public class DrawingPanel extends javax.swing.JPanel {
 //        //this.update(getGraphics());        
 //        this.repaint();
     }
-
+private int roundToSpacing(int coordinate){
+        double modulo = (coordinate % (grid.getSpacing() * scale));
+        System.out.println("-----");
+        System.out.println("modulo: " + modulo);
+        int base = (int)((coordinate - modulo)/ (grid.getSpacing() * scale));
+        System.out.println("base: " + base);
+        if(modulo > (grid.getSpacing() * scale / 2)) {
+            base++;
+        }
+        System.out.println("final: " + (int)(base * grid.getSpacing() * scale));
+        return (int)(base * grid.getSpacing() * scale);
+    }
+    
     private void mouseClickDrawMode(java.awt.event.MouseEvent evt) {
-   
+        int x = evt.getX();
+        int y = evt.getY();
+        if(stickGrid){
+            x = roundToSpacing(x);
+            y = roundToSpacing(y);
+        }
         System.out.println((int)0.9);
-        IDrawable connectPoint = te.getPolygon().checkSelection(evt.getX(), evt.getY(), false);
+        IDrawable connectPoint = te.getPolygon().checkSelection(x, y, false);
 
         if (connectPoint == null || !(connectPoint instanceof Point)) {
-            te.getPolygon().addPoint(evt.getX(), evt.getY());
+            te.getPolygon().addPoint(x, y);
         } else {
             int reply = JOptionPane.showConfirmDialog(this,
                     "Do you want to connect the segment to this point?",
@@ -170,6 +187,10 @@ public class DrawingPanel extends javax.swing.JPanel {
     public void switchFillShapes() {
         this.fillShapes = !this.fillShapes;
         refresh();
+    }
+
+    public double getScale() {
+        return scale;
     }
 
     public void setShowGrid(boolean showGrid) {

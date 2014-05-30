@@ -21,6 +21,7 @@ import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 
 /**
@@ -89,6 +90,7 @@ public class EditorForm extends javax.swing.JFrame {
         btnSelect = new javax.swing.JToggleButton();
         btnLine = new javax.swing.JToggleButton();
         panelGrid = new editor.gui.DrawingPanel();
+        lblCoordinates = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         menuFileNew = new javax.swing.JMenuItem();
@@ -135,6 +137,14 @@ public class EditorForm extends javax.swing.JFrame {
                 btnLineActionPerformed(evt);
             }
         });
+
+        panelGrid.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                panelGridMouseMoved(evt);
+            }
+        });
+
+        lblCoordinates.setText("x:- y:-");
 
         menuFile.setText("File");
 
@@ -307,7 +317,9 @@ public class EditorForm extends javax.swing.JFrame {
                 .addComponent(btnLine)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnSelect)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblCoordinates)
+                .addContainerGap())
             .addComponent(panelGrid, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -317,7 +329,8 @@ public class EditorForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDraw)
                     .addComponent(btnSelect)
-                    .addComponent(btnLine))
+                    .addComponent(btnLine)
+                    .addComponent(lblCoordinates))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(panelGrid, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE))
         );
@@ -391,7 +404,7 @@ public class EditorForm extends javax.swing.JFrame {
     }//GEN-LAST:event_menuToolsFillActionPerformed
 
     private void menuToolsStickActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuToolsStickActionPerformed
-        // TODO add your handling code here:
+        panelGrid.setStickGrid(((JCheckBoxMenuItem)evt.getSource()).getState());
     }//GEN-LAST:event_menuToolsStickActionPerformed
 
     private void btnDrawActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDrawActionPerformed
@@ -411,6 +424,10 @@ public class EditorForm extends javax.swing.JFrame {
         btnSelect.setSelected(false);
         panelGrid.setMode(Mode.LINE);
     }//GEN-LAST:event_btnLineActionPerformed
+
+    private void panelGridMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelGridMouseMoved
+        lblCoordinates.setText("x:" + (int)(evt.getX() / panelGrid.getScale()) + " y:" + (int)(evt.getY() / panelGrid.getScale()));
+    }//GEN-LAST:event_panelGridMouseMoved
 
     /**
      * @param args the command line arguments
@@ -452,6 +469,7 @@ public class EditorForm extends javax.swing.JFrame {
     private javax.swing.JToggleButton btnLine;
     private javax.swing.JToggleButton btnSelect;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JLabel lblCoordinates;
     private javax.swing.JMenu menuEdit;
     private javax.swing.JMenuItem menuEditDelete;
     private javax.swing.JMenuItem menuEditDeselect;
