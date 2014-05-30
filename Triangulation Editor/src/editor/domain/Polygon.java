@@ -19,7 +19,7 @@ public class Polygon implements IDrawable, Serializable {
 
     private List<Point> points;
     private List<Line> lines;
-    
+
     private boolean completed;
 
     public Polygon() {
@@ -32,7 +32,7 @@ public class Polygon implements IDrawable, Serializable {
         this.lines = lines;
     }
 
-    public void addPoint(int x, int y) {        
+    public void addPoint(int x, int y) {
         Point startPoint = getLineStartPoint();
         Point newPoint = new Point(x, y);
 
@@ -41,58 +41,84 @@ public class Polygon implements IDrawable, Serializable {
         } else {
             points.add(points.lastIndexOf(startPoint) + 1, newPoint);
         }
-        
-        if (startPoint != null)
+
+        if (startPoint != null) {
             lines.add(new Line(startPoint, newPoint, Line.OUTER_SEGMENT));
+        }
     }
-    
+
     public void connectSegment(Point p) {
         Point startPoint = getLineStartPoint();
-        
-        lines.add(new Line(startPoint, p, Line.OUTER_SEGMENT));
+
+        if (startPoint != p && countLines(p) < 2 && !checkDoubleLine(startPoint, p)) {
+            System.out.println("CONNECTED");
+            lines.add(new Line(startPoint, p, Line.OUTER_SEGMENT));
+        } else {
+            System.out.println("NOT CONNECTED");
+        }
+    }
+    
+    private boolean checkDoubleLine(Point p1, Point p2) {
+        for (Line l : lines) {
+            if ((l.getStartPoint() == p1 && l.getEndPoint() == p2) || 
+                    (l.getStartPoint() == p2 && l.getEndPoint() == p1)) {
+                return true;
+            } 
+        }
+        return false;
+    }
+
+    private int countLines(Point p) {
+        int counter = 0;
+
+        for (Line l : lines) {
+            if (l.getType() == Line.OUTER_SEGMENT && (l.getStartPoint() == p || l.getEndPoint() == p)) {
+                counter++;
+            }
+        }
+
+        return counter;
     }
 
     private Point getLineStartPoint() {
         for (Point p : points) {
-            int counter = 0;
-
-            for (Line l : lines) {
-                if (l.getType() == Line.OUTER_SEGMENT && (l.getStartPoint() == p || l.getEndPoint() == p)) {
-                    counter++;
-                }
-            }
+            
+            int counter = countLines(p);
             if ((counter != 2 && points.indexOf(p) != 0) || (points.indexOf(p) == 0 && counter == 0)) {
                 return p;
             }
         }
         return null;
     }
-    
+
     public void deleteSelectedItems() {
         List<Point> selectedPoints = new ArrayList<>();
         List<Line> selectedLines = new ArrayList<>();
-                
+
         for (Point p : points) {
-            if (p.isSelected())
+            if (p.isSelected()) {
                 selectedPoints.add(p);
-        }        
-        
-        for (Line l : lines) {
-            if (l.isSelected())
-                selectedLines.add(l);
-            
-            for (Point p : selectedPoints) {
-                if (l.getEndPoint() == p || l.getStartPoint() == p)
-                    selectedLines.add(l);
             }
         }
-        
+
+        for (Line l : lines) {
+            if (l.isSelected()) {
+                selectedLines.add(l);
+            }
+
+            for (Point p : selectedPoints) {
+                if (l.getEndPoint() == p || l.getStartPoint() == p) {
+                    selectedLines.add(l);
+                }
+            }
+        }
+
         System.out.println(selectedPoints.size());
         System.out.println(selectedLines.size());
-        
+
         points.removeAll(selectedPoints);
         lines.removeAll(selectedLines);
-        
+
     }
 
     public Point getMouseLineStartPoint() {
@@ -102,18 +128,18 @@ public class Polygon implements IDrawable, Serializable {
             return points.get(points.size() - 1);
         }
     }
-    
+
     public void clearSelection() {
         for (Point p : points) {
             p.setSelected(false);
         }
-        
+
         for (Line l : lines) {
             l.setSelected(false);
         }
     }
-    
-     @Override
+
+    @Override
     public void draw(Graphics2D g, double scale) {
         for (IDrawable p : this.points) {
             p.draw(g, scale);
@@ -129,32 +155,23 @@ public class Polygon implements IDrawable, Serializable {
         List<IDrawable> drawables = new ArrayList<>();
         drawables.addAll(points);
         drawables.addAll(lines);
-                        
+
         IDrawable selected = null;
         for (IDrawable x : drawables) {
             IDrawable d = x.checkSelection(mouseX, mouseY, multiSelect);
-            
-            if (d != null) 
+
+            if (d != null) {
                 selected = d;
+            }
         }
-        
+
         return selected;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+    @Override
+    public List<IDrawable> checkSelection(int mouseX, int mouseY, int width, int height, boolean multiSelect) {
+        return null;
+    }
 
     public List<Point> getPoints() {
         return points;
