@@ -53,17 +53,38 @@ public class Line implements IDrawable, Serializable {
     
     @Override
     public IDrawable checkSelection(int mouseX, int mouseY, boolean multiSelect) {
-        if (((startPoint.getX() - 5) < mouseX && mouseX < (startPoint.getX() + 5)) && 
-                ((startPoint.getY() - 5) < mouseY && mouseY < (startPoint.getY() + 5))) {
-            
-        }
-        
-        return null;
+       if (checkCruedSelection(mouseX, mouseY) && checkPreciseSelection(mouseX, mouseY)) {
+           this.selected = true;
+           return this;
+       }
+       this.selected = false;
+       return null;
     }    
     
     @Override
     public List<IDrawable> checkSelection(int mouseX, int mouseY, int width, int height, boolean multiSelect) {
         return null;
+    }
+    
+    private boolean checkCruedSelection(int mouseX, int mouseY) {
+         
+        int minX = (startPoint.getX() < endPoint.getX()) ? startPoint.getX() : endPoint.getX();
+        int maxX = (startPoint.getX() > endPoint.getX()) ? startPoint.getX() : endPoint.getX();
+        
+        int minY = (startPoint.getY() < endPoint.getY()) ? startPoint.getY() : endPoint.getY();
+        int maxY = (startPoint.getY() > endPoint.getY()) ? startPoint.getY() : endPoint.getY();
+              
+        
+        if ((minX + 2 < mouseX && mouseX < maxX - 2) && 
+                (minY + 2 < mouseY && mouseY < maxY - 2)) {            
+            return true;            
+        }        
+        return false;
+    }
+    
+    private boolean checkPreciseSelection(int mouseX, int mouseY) {
+        return true;
+        // TODO OOOOOOOOOOOOOOOOOOOO
     }
 
     public Point getStartPoint() {
