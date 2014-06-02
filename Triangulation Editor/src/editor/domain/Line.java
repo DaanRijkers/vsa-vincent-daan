@@ -15,16 +15,16 @@ import java.util.List;
  * @author Daan
  */
 public class Line implements IDrawable, Serializable {
-    
+
     private static final Color NORMAL_COLOR = Color.RED;
     private static final Color SELECTED_COLOR = Color.BLUE;
-    
+
     public static final int OUTER_SEGMENT = 0;
     public static final int INNER_SEGMENT = 1;
 
     private Point startPoint;
     private Point endPoint;
-    
+
     private int type;
     private boolean selected;
 
@@ -43,48 +43,66 @@ public class Line implements IDrawable, Serializable {
     }
 
     @Override
-    public void draw(Graphics2D g, double scale) {        
+    public void draw(Graphics2D g, double scale) {
         g.setColor((selected) ? SELECTED_COLOR : NORMAL_COLOR);
         g.drawLine(startPoint.getX(),
                 startPoint.getY(),
                 endPoint.getX(),
                 endPoint.getY());
     }
-    
+
     @Override
     public IDrawable checkSelection(int mouseX, int mouseY, boolean multiSelect) {
-       if (checkCruedSelection(mouseX, mouseY) && checkPreciseSelection(mouseX, mouseY)) {
-           this.selected = true;
-           return this;
-       }
-       this.selected = false;
-       return null;
-    }    
-    
+        if (checkCruedSelection(mouseX, mouseY) && checkPreciseSelection(mouseX, mouseY)) {
+            this.selected = true;
+            return this;
+        }
+        this.selected = false;
+        return null;
+    }
+
     @Override
     public List<IDrawable> checkSelection(int mouseX, int mouseY, int width, int height, boolean multiSelect) {
         return null;
     }
-    
+
     private boolean checkCruedSelection(int mouseX, int mouseY) {
-         
+
         int minX = (startPoint.getX() < endPoint.getX()) ? startPoint.getX() : endPoint.getX();
         int maxX = (startPoint.getX() > endPoint.getX()) ? startPoint.getX() : endPoint.getX();
-        
+
         int minY = (startPoint.getY() < endPoint.getY()) ? startPoint.getY() : endPoint.getY();
         int maxY = (startPoint.getY() > endPoint.getY()) ? startPoint.getY() : endPoint.getY();
-              
-        
-        if ((minX + 2 < mouseX && mouseX < maxX - 2) && 
-                (minY + 2 < mouseY && mouseY < maxY - 2)) {            
-            return true;            
-        }        
+
+        if ((minX + 2 < mouseX && mouseX < maxX - 2)
+                && (minY + 2 < mouseY && mouseY < maxY - 2)) {
+            return true;
+        }
         return false;
     }
-    
+
     private boolean checkPreciseSelection(int mouseX, int mouseY) {
-        return true;
-        // TODO OOOOOOOOOOOOOOOOOOOO
+
+//        int pointX = 0;
+//        int pointY = 0;
+//
+ double distance = Math.sqrt(Math.pow(startPoint.getX() - endPoint.getX(), 2.0)
+                + Math.pow((startPoint.getY() - endPoint.getY()), 2.0));
+
+        double numberOfPoints = distance / 6;
+
+        System.out.println("distance: " + distance);
+
+        for (double i = 1; i < (distance / 6.0); i += 1) {
+            Point p = new Point((int)(startPoint.getX() - ((startPoint.getX() - endPoint.getX()) / numberOfPoints * i)),
+                    (int)(startPoint.getY() - ((startPoint.getY() - endPoint.getY()) / numberOfPoints * i)));
+            
+            if (p.checkSelection(mouseX, mouseY, selected) != null) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public Point getStartPoint() {
@@ -119,6 +137,4 @@ public class Line implements IDrawable, Serializable {
         this.selected = selected;
     }
 
-    
-    
 }
