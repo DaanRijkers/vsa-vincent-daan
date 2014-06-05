@@ -52,40 +52,51 @@ public class Line implements IDrawable, Serializable {
     }
 
     /*
-    * Checks if the line is a almost perfectly horizontal or vertical line,
-    * if so, performs a checkSelection for either horizontal or vertical lines
-    * Otherwise checks in a crued manner if a rectangle around the line is selected,
-    * if so, checks in a precise manner if the line is selected
-    */
+     * Checks if the line is a almost perfectly horizontal or vertical line,
+     * if so, performs a checkSelection for either horizontal or vertical lines
+     * Otherwise checks in a crued manner if a rectangle around the line is selected,
+     * if so, checks in a precise manner if the line is selected
+     */
     @Override
     public IDrawable checkSelection(int mouseX, int mouseY, boolean multiSelect) {
 
-        // TODO, PUT THIS METHOD SOMEWHERE LOWER DOWN THE LINE SO IT WILL NOT
-        // DESELECT WHEN PRESSING ANOTHER LOCATION WITH MULTISELECT ON, BUT IT
-        // WILL DESELECT WHEN IT PRESSES ITSELF
-        if (this.selected && multiSelect) {
-            return this;
-        }
-        
+        boolean clicked = false;
+
         int diff = startPoint.getX() - endPoint.getX();
         if (-2 < diff && diff < 2) {
-            this.selected = (this.selected) ? !checkVerticalLineSelection(mouseX, mouseY) : checkVerticalLineSelection(mouseX, mouseY);
-            return (this.selected) ? this : null;
+            clicked = checkVerticalLineSelection(mouseX, mouseY);
         }
 
         diff = startPoint.getY() - endPoint.getY();
         if (-2 < diff && diff < 2) {
-            this.selected = checkHorizontalLineSelection(mouseX, mouseY);
-            return (this.selected) ? this: null;
+            clicked = checkHorizontalLineSelection(mouseX, mouseY);
         } else if (checkCruedSelection(mouseX, mouseY) && checkPreciseSelection(mouseX, mouseY)) {
-            this.selected = true;
-            return this;
+            clicked = true;
         }
-        this.selected = false;
-        return null;
+
+        if (clicked) {
+            if (multiSelect && this.selected) {
+                this.selected = false;
+                return null;
+            } else if (!multiSelect && this.selected) {
+                this.selected = false;
+                return null;
+            } else {
+                this.selected = true;
+                return this;
+            }
+
+        } else {
+            if (multiSelect && this.selected) {
+                this.selected = true;
+                return this;
+            } else {
+                this.selected = false;
+                return null;
+            }
+        }
     }
 
-    
     @Override
     public List<IDrawable> checkSelection(int mouseX, int mouseY, int width, int height, boolean multiSelect) {
         return null;
@@ -94,23 +105,23 @@ public class Line implements IDrawable, Serializable {
     private boolean checkHorizontalLineSelection(int mouseX, int mouseY) {
         int minX = (startPoint.getX() < endPoint.getX()) ? startPoint.getX() : endPoint.getX();
         int maxX = (startPoint.getX() > endPoint.getX()) ? startPoint.getX() : endPoint.getX();
-        
+
         int minY = (startPoint.getY() < endPoint.getY()) ? startPoint.getY() : endPoint.getY();
         int maxY = (startPoint.getY() > endPoint.getY()) ? startPoint.getY() : endPoint.getY();
-        
-        return (minX < mouseX && mouseX < maxX) && 
-                ((minY - 3) < mouseY && (mouseY - 3) < maxY);        
+
+        return (minX < mouseX && mouseX < maxX)
+                && ((minY - 3) < mouseY && (mouseY - 3) < maxY);
     }
 
     private boolean checkVerticalLineSelection(int mouseX, int mouseY) {
         int minX = (startPoint.getX() < endPoint.getX()) ? startPoint.getX() : endPoint.getX();
         int maxX = (startPoint.getX() > endPoint.getX()) ? startPoint.getX() : endPoint.getX();
-        
+
         int minY = (startPoint.getY() < endPoint.getY()) ? startPoint.getY() : endPoint.getY();
         int maxY = (startPoint.getY() > endPoint.getY()) ? startPoint.getY() : endPoint.getY();
-        
-        return ((minX - 3) < mouseX && mouseX < (maxX + 3)) && 
-                ((minY < mouseY) && (mouseY < maxY));
+
+        return ((minX - 3) < mouseX && mouseX < (maxX + 3))
+                && ((minY < mouseY) && (mouseY < maxY));
     }
 
     private boolean checkCruedSelection(int mouseX, int mouseY) {
@@ -120,7 +131,7 @@ public class Line implements IDrawable, Serializable {
 
         int minY = (startPoint.getY() < endPoint.getY()) ? startPoint.getY() : endPoint.getY();
         int maxY = (startPoint.getY() > endPoint.getY()) ? startPoint.getY() : endPoint.getY();
-        
+
         return (minX + 2 < mouseX && mouseX < maxX - 2)
                 && (minY + 2 < mouseY && mouseY < maxY - 2);
     }
