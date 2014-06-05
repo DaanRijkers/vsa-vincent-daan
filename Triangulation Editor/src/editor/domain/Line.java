@@ -51,9 +51,33 @@ public class Line implements IDrawable, Serializable {
                 endPoint.getY());
     }
 
+    /*
+    * Checks if the line is a almost perfectly horizontal or vertical line,
+    * if so, performs a checkSelection for either horizontal or vertical lines
+    * Otherwise checks in a crued manner if a rectangle around the line is selected,
+    * if so, checks in a precise manner if the line is selected
+    */
     @Override
     public IDrawable checkSelection(int mouseX, int mouseY, boolean multiSelect) {
-        if (checkCruedSelection(mouseX, mouseY) && checkPreciseSelection(mouseX, mouseY)) {
+
+        // TODO, PUT THIS METHOD SOMEWHERE LOWER DOWN THE LINE SO IT WILL NOT
+        // DESELECT WHEN PRESSING ANOTHER LOCATION WITH MULTISELECT ON, BUT IT
+        // WILL DESELECT WHEN IT PRESSES ITSELF
+        if (this.selected && multiSelect) {
+            return this;
+        }
+        
+        int diff = startPoint.getX() - endPoint.getX();
+        if (-2 < diff && diff < 2) {
+            this.selected = (this.selected) ? !checkVerticalLineSelection(mouseX, mouseY) : checkVerticalLineSelection(mouseX, mouseY);
+            return (this.selected) ? this : null;
+        }
+
+        diff = startPoint.getY() - endPoint.getY();
+        if (-2 < diff && diff < 2) {
+            this.selected = checkHorizontalLineSelection(mouseX, mouseY);
+            return (this.selected) ? this: null;
+        } else if (checkCruedSelection(mouseX, mouseY) && checkPreciseSelection(mouseX, mouseY)) {
             this.selected = true;
             return this;
         }
@@ -61,9 +85,32 @@ public class Line implements IDrawable, Serializable {
         return null;
     }
 
+    
     @Override
     public List<IDrawable> checkSelection(int mouseX, int mouseY, int width, int height, boolean multiSelect) {
         return null;
+    }
+
+    private boolean checkHorizontalLineSelection(int mouseX, int mouseY) {
+        int minX = (startPoint.getX() < endPoint.getX()) ? startPoint.getX() : endPoint.getX();
+        int maxX = (startPoint.getX() > endPoint.getX()) ? startPoint.getX() : endPoint.getX();
+        
+        int minY = (startPoint.getY() < endPoint.getY()) ? startPoint.getY() : endPoint.getY();
+        int maxY = (startPoint.getY() > endPoint.getY()) ? startPoint.getY() : endPoint.getY();
+        
+        return (minX < mouseX && mouseX < maxX) && 
+                ((minY - 3) < mouseY && (mouseY - 3) < maxY);        
+    }
+
+    private boolean checkVerticalLineSelection(int mouseX, int mouseY) {
+        int minX = (startPoint.getX() < endPoint.getX()) ? startPoint.getX() : endPoint.getX();
+        int maxX = (startPoint.getX() > endPoint.getX()) ? startPoint.getX() : endPoint.getX();
+        
+        int minY = (startPoint.getY() < endPoint.getY()) ? startPoint.getY() : endPoint.getY();
+        int maxY = (startPoint.getY() > endPoint.getY()) ? startPoint.getY() : endPoint.getY();
+        
+        return ((minX - 3) < mouseX && mouseX < (maxX + 3)) && 
+                ((minY < mouseY) && (mouseY < maxY));
     }
 
     private boolean checkCruedSelection(int mouseX, int mouseY) {
@@ -73,30 +120,22 @@ public class Line implements IDrawable, Serializable {
 
         int minY = (startPoint.getY() < endPoint.getY()) ? startPoint.getY() : endPoint.getY();
         int maxY = (startPoint.getY() > endPoint.getY()) ? startPoint.getY() : endPoint.getY();
-
-        if ((minX + 2 < mouseX && mouseX < maxX - 2)
-                && (minY + 2 < mouseY && mouseY < maxY - 2)) {
-            return true;
-        }
-        return false;
+        
+        return (minX + 2 < mouseX && mouseX < maxX - 2)
+                && (minY + 2 < mouseY && mouseY < maxY - 2);
     }
 
     private boolean checkPreciseSelection(int mouseX, int mouseY) {
 
-//        int pointX = 0;
-//        int pointY = 0;
-//
- double distance = Math.sqrt(Math.pow(startPoint.getX() - endPoint.getX(), 2.0)
+        double distance = Math.sqrt(Math.pow(startPoint.getX() - endPoint.getX(), 2.0)
                 + Math.pow((startPoint.getY() - endPoint.getY()), 2.0));
 
         double numberOfPoints = distance / 6;
 
-        System.out.println("distance: " + distance);
-
         for (double i = 1; i < (distance / 6.0); i += 1) {
-            Point p = new Point((int)(startPoint.getX() - ((startPoint.getX() - endPoint.getX()) / numberOfPoints * i)),
-                    (int)(startPoint.getY() - ((startPoint.getY() - endPoint.getY()) / numberOfPoints * i)));
-            
+            Point p = new Point((int) (startPoint.getX() - ((startPoint.getX() - endPoint.getX()) / numberOfPoints * i)),
+                    (int) (startPoint.getY() - ((startPoint.getY() - endPoint.getY()) / numberOfPoints * i)));
+
             if (p.checkSelection(mouseX, mouseY, selected) != null) {
                 return true;
             }
