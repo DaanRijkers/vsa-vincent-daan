@@ -1,0 +1,8 @@
+Functionality:
+- Added option to drag points/lines
+- Added option to select all (with top-menu & hotkey)
+- Added checks to make sure you can't connect to lines you're not supposed to
+
+Bug fixes:
+- Mouse line originates in proper location
+- Less 'old' mouse lines stay on screen
