@@ -86,9 +86,10 @@ public class DrawingPanel extends javax.swing.JPanel {
 
     @Override
     public void paint(Graphics g) {
-        super.paintComponents(g);
+        //super.paintComponents(g);
 
         // Draw gridlines
+        g.setPaintMode();
         if (showGrid) {
             if (grid == null) {
                 grid = new Grid(25, this.getWidth(), this.getHeight());
@@ -101,9 +102,9 @@ public class DrawingPanel extends javax.swing.JPanel {
         g.drawLine(0, 0, this.getWidth(), 0);
 
         // Draw line following mouse
-        if (mode == Mode.DRAW && mouseLine.getStartPoint() != null && mouseLine.getEndPoint() != null) {
-            mouseLine.draw((Graphics2D) g, scale);
-        }
+//        if (mode == Mode.DRAW && mouseLine.getStartPoint() != null && mouseLine.getEndPoint() != null) {
+//            mouseLine.draw((Graphics2D) g, scale);
+//        }
 
         // Draw polygon
         if (te != null && te.getPolygon() != null) {
@@ -116,17 +117,31 @@ public class DrawingPanel extends javax.swing.JPanel {
         this.update(this.getGraphics());
     }
 
-    private void createMouseLine(MouseEvent e) {
-//        if (mouseLine.getStartPoint() == null) {
-//            mouseLine = new Line(te.getPolygon().getMouseLineStartPoint());
-//        }
-//        mouseLine.setEndPoint(new Point(e.getX(), e.getY()));
-//        
-//        //this.getGraphics().clearRect(0, 0, this.getWidth(), this.getHeight());
-//        //this.update(getGraphics());        
-//        this.repaint();
+    boolean lineVis=false;
+    
+    private void renderLine() {
+        if (mode == Mode.DRAW && mouseLine.getStartPoint() != null && mouseLine.getEndPoint() != null) {
+            Graphics2D g2d=(Graphics2D)getGraphics();
+            g2d.setXORMode(Color.GRAY);
+            mouseLine.draw(g2d, scale);
+        }
+        lineVis=!lineVis;
     }
-private int roundToSpacing(int coordinate){
+    
+    private void createMouseLine(MouseEvent e) {
+        if (lineVis) renderLine();
+        if (mouseLine.getStartPoint() == null) {
+            mouseLine = new Line(te.getPolygon().getMouseLineStartPoint());
+        }
+        mouseLine.setEndPoint(new Point(e.getX(), e.getY()));
+        renderLine();
+        //this.getGraphics().clearRect(0, 0, this.getWidth(), this.getHeight());
+        //this.update(getGraphics());        
+        //this.repaint();
+        //this.update(this.getGraphics());
+    }
+
+    private int roundToSpacing(int coordinate){
         double modulo = (coordinate % (grid.getSpacing() * scale));
         int base = (int)((coordinate - modulo)/ (grid.getSpacing() * scale));
         
