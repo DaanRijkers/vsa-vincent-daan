@@ -19,6 +19,8 @@ import java.util.List;
  */
 public class TriangulateService {
 
+    private static int nextTriangle = 0; 
+    
     public static void determineTrianglesFromNewLine(Polygon p, Line newLine) {
 
         Point p1 = newLine.getStartPoint();
@@ -47,7 +49,7 @@ public class TriangulateService {
                             && (l3.getStartPoint() == p2 || l3.getEndPoint() == p2)
                             && (l3.getStartPoint() == searchPoint || l3.getEndPoint() == searchPoint)) {
 
-                        triangles.add(createTriangle(newLine, secondLine, l3, p.getTriangles().size() + triangles.size()));
+                        triangles.add(createTriangle(newLine, secondLine, l3));
                     }
                 }
             }
@@ -60,7 +62,7 @@ public class TriangulateService {
         p.getTriangles().addAll(triangles);
     }
 
-    private static Triangle createTriangle(Line l1, Line l2, Line l3, int number) {
+    private static Triangle createTriangle(Line l1, Line l2, Line l3) {
         System.out.println("FOUND TRIANGLE");
         System.out.println(l1.getStartPoint() + " - " + l1.getEndPoint());
         System.out.println(l2.getStartPoint() + " - " + l2.getEndPoint());
@@ -71,7 +73,7 @@ public class TriangulateService {
         ls.add(l2);
         ls.add(l3);
 
-        return new Triangle(ls, Color.ORANGE, number + 1);
+        return new Triangle(ls, Color.ORANGE, nextTriangle += 1);
     }
 
 }

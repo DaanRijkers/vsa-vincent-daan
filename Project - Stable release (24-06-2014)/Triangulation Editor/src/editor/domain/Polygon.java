@@ -172,7 +172,7 @@ public class Polygon implements IDrawable, Serializable {
 
         points.removeAll(selectedPoints);
         lines.removeAll(selectedLines);
-        triangles.removeAll(triangles);
+        triangles.removeAll(selectedTriangles);
 
         //setLastAsHightlighted();
     }
