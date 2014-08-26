@@ -7,6 +7,7 @@ package editor.gui;
 
 import editor.domain.Grid;
 import editor.domain.IDrawable;
+import editor.domain.Knot;
 import editor.domain.Line;
 import editor.domain.Mode;
 import editor.domain.Point;
@@ -51,6 +52,7 @@ public class DrawingPanel extends javax.swing.JPanel {
     private boolean dragVis;
     private List<IDrawable> selectedObjects;
     private Point startLinePoint;
+    private Triangle selectedTriangle;
 
     /**
      * Creates new form DrawingPanel
@@ -81,6 +83,14 @@ public class DrawingPanel extends javax.swing.JPanel {
 
         t1 = new Triangle(lines, Color.MAGENTA, 10);
         t1.draw(g, scale);
+        
+        Knot k1 = new Knot(200, 200);
+        Knot k2 = new Knot(400, 100);
+        Point p4 = new Point(350, 300); 
+        p4.getKnots().add(k1);
+        p4.getKnots().add(k2);
+        
+        p4.draw(g, scale);
     }
     ////////////////////////////////////////////
     //////////////// END TEST //////////////////
@@ -105,6 +115,7 @@ public class DrawingPanel extends javax.swing.JPanel {
         this.dragVis = false;
         this.selectedObjects = new ArrayList<>();
         this.startLinePoint = null;
+        this.selectedTriangle = null;
 
         this.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
@@ -143,16 +154,12 @@ public class DrawingPanel extends javax.swing.JPanel {
         g.setColor(Color.BLACK);
         g.drawLine(0, 0, this.getWidth(), 0);
 
-        // Draw line following mouse
-//        if (mode == Mode.DRAW && mouseLine.getStartPoint() != null && mouseLine.getEndPoint() != null) {
-//            mouseLine.draw((Graphics2D) g, scale);
-//        }
         // Draw polygon
         if (te != null && te.getPolygon() != null) {
             te.getPolygon().draw((Graphics2D) g, scale);
         }
 
-        //test((Graphics2D) g);
+        test((Graphics2D) g);
     }
 
     public void refresh() {
@@ -280,7 +287,16 @@ public class DrawingPanel extends javax.swing.JPanel {
     }
 
     private void mouseClickKnotMode(java.awt.event.MouseEvent evt) {
-        System.out.println(t1.checkSelection(evt.getX(), evt.getY(), multiSelect));
+        IDrawable d = te.getPolygon().checkSelection(evt.getX(), evt.getY(), multiSelect);
+
+//        if (d == this.selectedTriangle) {
+//            this.selectedTriangle = null;
+//            this.update(this.getGraphics());
+//        } else if (d instanceof Triangle) {
+//            this.selectedTriangle = (Triangle) d;
+//            this.refresh();
+//        }
+
     }
 
     private void mouseClickSelectMode(java.awt.event.MouseEvent evt) {
@@ -322,6 +338,7 @@ public class DrawingPanel extends javax.swing.JPanel {
     public void setMode(Mode mode) {
         this.mode = mode;
         te.getPolygon().checkSelection(0, 0, false);
+        selectedTriangle = null;
         this.update(this.getGraphics());
     }
 

@@ -44,7 +44,7 @@ public class Triangle implements IDrawable, Serializable {
             pointsSet.add(l.getStartPoint());
             pointsSet.add(l.getEndPoint());
         }
-        System.out.println(pointsSet.size());
+        
         this.points = new ArrayList<>(pointsSet);
     }
 
@@ -127,16 +127,17 @@ public class Triangle implements IDrawable, Serializable {
 
     @Override
     public IDrawable checkSelection(int mouseX, int mouseY, boolean multiSelect) {
-        if (((center.getX() - 10) < mouseX && mouseX < (center.getX() + 10))
-                && ((center.getY() - 10) < mouseY && mouseY < (center.getY() + 10))) {
-            this.selected = !this.selected;
-            return this;
-        } else if (this.selected == true && multiSelect == true) {
-            return this;
-        } else {
-            this.selected = false;
-            return null;
-        }
+//        if (((center.getX() - 10) < mouseX && mouseX < (center.getX() + 10))
+//                && ((center.getY() - 10) < mouseY && mouseY < (center.getY() + 10))) {
+//            this.selected = !this.selected;
+//            return this;
+//        } else if (this.selected == true && multiSelect == true) {
+//            return this;
+//        } else {
+//            this.selected = false;
+//            return null;
+//        }
+        return null;
     }
 
     @Override

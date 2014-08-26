@@ -169,6 +169,14 @@ public class Polygon implements IDrawable, Serializable {
                 }
             }
         }
+        
+        for (Line l : selectedLines) {
+            for (Triangle t: triangles) {
+                if (t.containsLine(l)) {
+                    selectedTriangles.add(t);
+                }
+            }
+        }
 
         points.removeAll(selectedPoints);
         lines.removeAll(selectedLines);
@@ -242,6 +250,7 @@ public class Polygon implements IDrawable, Serializable {
         List<IDrawable> drawables = new ArrayList<>();
         drawables.addAll(points);
         drawables.addAll(lines);
+        drawables.addAll(triangles);
 
         IDrawable selected = null;
         for (IDrawable x : drawables) {
