@@ -16,11 +16,14 @@ import java.util.List;
  */
 public class Line implements IDrawable, Serializable {
 
-    private static final Color NORMAL_COLOR = Color.RED;
+    private static final Color BORDER_COLOR = Color.BLACK;
     private static final Color SELECTED_COLOR = Color.BLUE;
+    private static final Color INNER_SEGMENT_COLOR = Color.yellow;
 
-    public static final int OUTER_SEGMENT = 0;
-    public static final int INNER_SEGMENT = 1;
+    public static final int BORDER_OUTER_SEGMENT = 0;
+    public static final int BORDER_INNER_SEGMENT = 1;
+    public static final int INNER_SEGMENT = 2;
+    
 
     private Point startPoint;
     private Point endPoint;
@@ -31,7 +34,7 @@ public class Line implements IDrawable, Serializable {
     public Line(Point start) {
         this.startPoint = start;
         this.endPoint = null;
-        this.type = Line.OUTER_SEGMENT;
+        this.type = Line.BORDER_OUTER_SEGMENT;
         this.selected = false;
     }
 
@@ -44,7 +47,13 @@ public class Line implements IDrawable, Serializable {
 
     @Override
     public void draw(Graphics2D g, double scale) {
-        g.setColor((selected) ? SELECTED_COLOR : NORMAL_COLOR);
+        if (selected) {
+            g.setColor(SELECTED_COLOR);
+        } else {
+            g.setColor((type == Line.INNER_SEGMENT) ? Line.INNER_SEGMENT_COLOR : Line.BORDER_COLOR);
+        }
+        
+        //g.setColor((selected) ? SELECTED_COLOR : BORDER_COLOR);
         g.drawLine(startPoint.getX(),
                 startPoint.getY(),
                 endPoint.getX(),

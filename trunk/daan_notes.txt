@@ -1,0 +1,14 @@
+done: removed highlighting last point when drawing point
+done: removed creating lines when creating points
+done: removed check can connect
+done: removed want to connect two segments question
+
+done: delete items in appropriate modes
+done: select line in linemode
+done: make rdbuttons invicible at startup
+
+triangulation:
+- elk punt/lijn in minstends 1 driehoek
+- vanuit elk punt een lijn proberen te trekke naar elke andere lijn
+- controleren of deze lijn een andere kruist, zo ja weghalen
+- afwisselen van punt nadat deze in max3 driehoeken zit?

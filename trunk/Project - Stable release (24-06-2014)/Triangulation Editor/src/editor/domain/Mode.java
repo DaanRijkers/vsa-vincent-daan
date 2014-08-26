@@ -11,7 +11,12 @@ package editor.domain;
  * @author Daan
  */
 public enum Mode {
-    DRAW,
+    POINT,
     LINE,
-    SELECT
+    LINE_BORDER_OUTER,
+    LINE_BORDER_INNER,
+    LINE_INNER,
+    KNOT,
+    TRIANGLE,
+    SELECT,
 }

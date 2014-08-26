@@ -21,15 +21,18 @@ public class TriangulationService {
         this.polygon = new Polygon();
     }
     
-   
+    public void clearFile() {
+        this.polygon = new Polygon();
+        FileHandler.clearOpenedFile();
+    }
     
-    public Polygon loadFile(String path) {
-        // this.polygon = read polygon from file
+    public Polygon loadFile() {
+        this.polygon = FileHandler.readFromFile();
         return polygon;
     }
     
-    public void SaveFile(String path, String name) {
-        // write this.polygon
+    public void saveFile(boolean saveAs) {
+        FileHandler.writeToFile(polygon, saveAs);
     }
 
     public Polygon getPolygon() {

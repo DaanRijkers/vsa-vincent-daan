@@ -5,6 +5,7 @@
  */
 package editor.gui;
 
+import editor.domain.Line;
 import editor.domain.Mode;
 import editor.domain.Polygon;
 import editor.service.FileHandler;
@@ -13,6 +14,7 @@ import java.awt.KeyboardFocusManager;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JToggleButton;
 
 /**
  *
@@ -29,7 +31,7 @@ public class EditorForm extends javax.swing.JFrame {
         initComponents();
         this.te = new TriangulationService();
         panelGrid.setTriangulationEditor(te);
-        btnDraw.setSelected(true);
+        setMode(btnPoint, Mode.POINT);
 
 //        this.addFocusListener(new FocusListener() {
 //
@@ -47,7 +49,6 @@ public class EditorForm extends javax.swing.JFrame {
 //                panelGrid.requestFocus();
 //            }
 //        });
-
         KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         manager.addPropertyChangeListener(new PropertyChangeListener() {
 
@@ -57,7 +58,7 @@ public class EditorForm extends javax.swing.JFrame {
                 panelGrid.requestFocusInWindow();
             }
         });
-        
+
 //        manager.addKeyEventDispatcher(new KeyEventDispatcher() {
 //
 //            @Override
@@ -66,6 +67,19 @@ public class EditorForm extends javax.swing.JFrame {
 //                return false;
 //            }
 //        });
+    }
+
+    private void setMode(JToggleButton btn, Mode mode) {
+        btnPoint.setSelected((btnPoint == btn));
+        btnLine.setSelected((btnLine == btn));
+        btnTriangle.setSelected((btnTriangle == btn));
+        btnKnot.setSelected((btnKnot == btn));
+        btnSelect.setSelected((btnSelect == btn));
+        panelGrid.setMode(mode);
+        
+        rdbtnInnerBorder.setVisible((btnLine == btn));
+        rdbtnOuterBorder.setVisible((btnLine == btn));
+        rdbtnInnerLine.setVisible((btnLine == btn));
     }
 
     /**
@@ -77,11 +91,17 @@ public class EditorForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnDraw = new javax.swing.JToggleButton();
+        grpRadioButtons = new javax.swing.ButtonGroup();
+        btnPoint = new javax.swing.JToggleButton();
         btnSelect = new javax.swing.JToggleButton();
         btnLine = new javax.swing.JToggleButton();
         panelGrid = new editor.gui.DrawingPanel();
         lblCoordinates = new javax.swing.JLabel();
+        btnTriangle = new javax.swing.JToggleButton();
+        btnKnot = new javax.swing.JToggleButton();
+        rdbtnOuterBorder = new javax.swing.JRadioButton();
+        rdbtnInnerBorder = new javax.swing.JRadioButton();
+        rdbtnInnerLine = new javax.swing.JRadioButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         menuFileNew = new javax.swing.JMenuItem();
@@ -108,10 +128,10 @@ public class EditorForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Triangulation Editor");
 
-        btnDraw.setText("Draw");
-        btnDraw.addActionListener(new java.awt.event.ActionListener() {
+        btnPoint.setText("Point");
+        btnPoint.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDrawActionPerformed(evt);
+                btnPointActionPerformed(evt);
             }
         });
 
@@ -123,6 +143,8 @@ public class EditorForm extends javax.swing.JFrame {
         });
 
         btnLine.setText("Line");
+        btnLine.setMaximumSize(new java.awt.Dimension(71, 23));
+        btnLine.setMinimumSize(new java.awt.Dimension(71, 23));
         btnLine.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLineActionPerformed(evt);
@@ -136,6 +158,45 @@ public class EditorForm extends javax.swing.JFrame {
         });
 
         lblCoordinates.setText("x:- y:-");
+
+        btnTriangle.setText("Triangle");
+        btnTriangle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTriangleActionPerformed(evt);
+            }
+        });
+
+        btnKnot.setText("Knot");
+        btnKnot.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKnotActionPerformed(evt);
+            }
+        });
+
+        grpRadioButtons.add(rdbtnOuterBorder);
+        rdbtnOuterBorder.setSelected(true);
+        rdbtnOuterBorder.setText("Outer border");
+        rdbtnOuterBorder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbtnOuterBorderActionPerformed(evt);
+            }
+        });
+
+        grpRadioButtons.add(rdbtnInnerBorder);
+        rdbtnInnerBorder.setText("Inner border");
+        rdbtnInnerBorder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbtnInnerBorderActionPerformed(evt);
+            }
+        });
+
+        grpRadioButtons.add(rdbtnInnerLine);
+        rdbtnInnerLine.setText("Inner line");
+        rdbtnInnerLine.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbtnInnerLineActionPerformed(evt);
+            }
+        });
 
         menuFile.setText("File");
 
@@ -304,12 +365,22 @@ public class EditorForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnDraw)
+                .addComponent(btnPoint, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnLine)
+                .addComponent(btnLine, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnSelect)
+                .addComponent(btnTriangle)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnKnot, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(rdbtnOuterBorder)
+                .addGap(18, 18, 18)
+                .addComponent(rdbtnInnerBorder)
+                .addGap(18, 18, 18)
+                .addComponent(rdbtnInnerLine)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(lblCoordinates)
                 .addContainerGap())
             .addComponent(panelGrid, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -319,12 +390,17 @@ public class EditorForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDraw)
+                    .addComponent(btnPoint)
+                    .addComponent(btnLine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblCoordinates)
+                    .addComponent(btnTriangle)
+                    .addComponent(btnKnot)
                     .addComponent(btnSelect)
-                    .addComponent(btnLine)
-                    .addComponent(lblCoordinates))
+                    .addComponent(rdbtnOuterBorder)
+                    .addComponent(rdbtnInnerBorder)
+                    .addComponent(rdbtnInnerLine))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(panelGrid, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE))
+                .addComponent(panelGrid, javax.swing.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE))
         );
 
         pack();
@@ -333,20 +409,24 @@ public class EditorForm extends javax.swing.JFrame {
     private void menuFileNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileNewActionPerformed
         te.setPolygon(new Polygon());
         FileHandler.clearOpenedFile();
+        //te.clearFile();
         panelGrid.refresh();
     }//GEN-LAST:event_menuFileNewActionPerformed
 
     private void menuFileOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileOpenActionPerformed
         te.setPolygon(FileHandler.readFromFile());
+        //te.loadFile();
         panelGrid.refresh();
     }//GEN-LAST:event_menuFileOpenActionPerformed
 
     private void menuFileSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileSaveActionPerformed
         FileHandler.writeToFile(te.getPolygon(), false);
+        //te.saveFile(false);
     }//GEN-LAST:event_menuFileSaveActionPerformed
 
     private void menuFileSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileSaveAsActionPerformed
         FileHandler.writeToFile(te.getPolygon(), true);
+        //te.saveFile(true);
     }//GEN-LAST:event_menuFileSaveAsActionPerformed
 
     private void menuEditSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditSelectActionPerformed
@@ -397,30 +477,55 @@ public class EditorForm extends javax.swing.JFrame {
     }//GEN-LAST:event_menuToolsFillActionPerformed
 
     private void menuToolsStickActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuToolsStickActionPerformed
-        panelGrid.setStickGrid(((JCheckBoxMenuItem)evt.getSource()).getState());
+        panelGrid.setStickGrid(((JCheckBoxMenuItem) evt.getSource()).getState());
     }//GEN-LAST:event_menuToolsStickActionPerformed
 
-    private void btnDrawActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDrawActionPerformed
-        btnSelect.setSelected(false);
-        btnLine.setSelected(false);
-        panelGrid.setMode(Mode.DRAW);
-    }//GEN-LAST:event_btnDrawActionPerformed
+    private void btnPointActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPointActionPerformed
+
+        setMode((JToggleButton) evt.getSource(), Mode.POINT);
+    }//GEN-LAST:event_btnPointActionPerformed
 
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
-        btnDraw.setSelected(false);
-        btnLine.setSelected(false);
-        panelGrid.setMode(Mode.SELECT);
+
+        setMode((JToggleButton) evt.getSource(), Mode.SELECT);
     }//GEN-LAST:event_btnSelectActionPerformed
 
     private void btnLineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLineActionPerformed
-        btnDraw.setSelected(false);
-        btnSelect.setSelected(false);
-        panelGrid.setMode(Mode.LINE);
+//        Mode mode = Mode.LINE_BORDER_INNER;
+//        if (rdbtnInnerBorder.isSelected())
+//            mode = Mode.LINE_BORDER_INNER;
+//        else if (rdbtnOuterBorder.isSelected()) 
+//            mode = Mode.LINE_BORDER_OUTER;
+//        else 
+//            mode = Mode.LINE_INNER;
+        setMode((JToggleButton) evt.getSource(), Mode.LINE);
     }//GEN-LAST:event_btnLineActionPerformed
 
     private void panelGridMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelGridMouseMoved
-        lblCoordinates.setText("x:" + (int)(evt.getX() / panelGrid.getScale()) + " y:" + (int)(evt.getY() / panelGrid.getScale()));
+        lblCoordinates.setText("x:" + (int) (evt.getX() / panelGrid.getScale()) + 
+                " y:" + (int) (evt.getY() / panelGrid.getScale()));
     }//GEN-LAST:event_panelGridMouseMoved
+
+    private void btnTriangleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTriangleActionPerformed
+        setMode((JToggleButton) evt.getSource(), Mode.TRIANGLE);
+    }//GEN-LAST:event_btnTriangleActionPerformed
+
+    private void btnKnotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKnotActionPerformed
+        setMode((JToggleButton) evt.getSource(), Mode.KNOT);
+    }//GEN-LAST:event_btnKnotActionPerformed
+
+    private void rdbtnOuterBorderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbtnOuterBorderActionPerformed
+        //setMode(btnLine, Mode.LINE_BORDER_OUTER);
+        panelGrid.setLineMode(Line.BORDER_OUTER_SEGMENT);
+    }//GEN-LAST:event_rdbtnOuterBorderActionPerformed
+
+    private void rdbtnInnerBorderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbtnInnerBorderActionPerformed
+        panelGrid.setLineMode(Line.BORDER_INNER_SEGMENT);
+    }//GEN-LAST:event_rdbtnInnerBorderActionPerformed
+
+    private void rdbtnInnerLineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbtnInnerLineActionPerformed
+        panelGrid.setLineMode(Line.INNER_SEGMENT);
+    }//GEN-LAST:event_rdbtnInnerLineActionPerformed
 
     /**
      * @param args the command line arguments
@@ -458,9 +563,12 @@ public class EditorForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JToggleButton btnDraw;
+    private javax.swing.JToggleButton btnKnot;
     private javax.swing.JToggleButton btnLine;
+    private javax.swing.JToggleButton btnPoint;
     private javax.swing.JToggleButton btnSelect;
+    private javax.swing.JToggleButton btnTriangle;
+    private javax.swing.ButtonGroup grpRadioButtons;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JLabel lblCoordinates;
     private javax.swing.JMenu menuEdit;
@@ -485,5 +593,8 @@ public class EditorForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuZoomIn;
     private javax.swing.JMenuItem menuZoomOut;
     private editor.gui.DrawingPanel panelGrid;
+    private javax.swing.JRadioButton rdbtnInnerBorder;
+    private javax.swing.JRadioButton rdbtnInnerLine;
+    private javax.swing.JRadioButton rdbtnOuterBorder;
     // End of variables declaration//GEN-END:variables
 }
