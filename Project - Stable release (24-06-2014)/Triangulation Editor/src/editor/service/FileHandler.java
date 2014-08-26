@@ -43,7 +43,7 @@ public class FileHandler {
 
             return (Polygon) ois.readObject();
         } catch (IOException | ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(null, "File does not contain polygon.");
+            MessageService.showWrongFileMessage();
             openedFile = null;
             
         } finally {

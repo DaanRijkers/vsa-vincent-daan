@@ -50,9 +50,13 @@ public class Point implements IDrawable, Serializable {
 
         Ellipse2D.Double circle = new Ellipse2D.Double(x - 5, y - 5, size, size);
         g.fill(circle);
-        
+
         g.setColor(Color.BLACK);
-        g.drawString(this.toString(), x - 2, y + 17);
+        try {
+            g.drawString(this.toString(), x - 2, y + 17);
+        } catch (InternalError ex) {
+            System.out.println("Java Internal Error: \"Something not implemented yet\".");
+        }
     }
 
     @Override
@@ -60,7 +64,7 @@ public class Point implements IDrawable, Serializable {
         if (((x - 5) < mouseX && mouseX < (x + 5))
                 && ((y - 5) < mouseY && mouseY < (y + 5))) {
             this.selected = !this.selected;
-            return (this.selected) ? this : null;
+            return this;
         } else if (this.selected == true && multiSelect == true) {
             return this;
         } else {
@@ -73,7 +77,7 @@ public class Point implements IDrawable, Serializable {
     public List<IDrawable> checkSelection(int mouseX, int mouseY, int width, int height, boolean multiSelect) {
         return null;
     }
-    
+
     @Override
     public String toString() {
         return "(" + x + ", " + y + ")";

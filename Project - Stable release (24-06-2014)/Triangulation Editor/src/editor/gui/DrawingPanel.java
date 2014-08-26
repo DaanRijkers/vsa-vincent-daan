@@ -5,12 +5,13 @@
  */
 package editor.gui;
 
-import editor.service.TriangulationService;
 import editor.domain.Grid;
 import editor.domain.IDrawable;
 import editor.domain.Line;
 import editor.domain.Mode;
 import editor.domain.Point;
+import editor.domain.Triangle;
+import editor.service.TriangulationService;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -37,6 +38,8 @@ public class DrawingPanel extends javax.swing.JPanel {
     private boolean fillShapes;
     private boolean multiSelect;
     private Mode mode;
+    private int lineMode;
+
     // Parameters for keeping scale
     private double scale;
     private TriangulationService te;
@@ -47,6 +50,7 @@ public class DrawingPanel extends javax.swing.JPanel {
     private int prevY;
     private boolean dragVis;
     private List<IDrawable> selectedObjects;
+    private Point startLinePoint;
 
     /**
      * Creates new form DrawingPanel
@@ -56,13 +60,40 @@ public class DrawingPanel extends javax.swing.JPanel {
         initValues();
     }
 
+    ////////////////////////////////////////////
+    ////////////// TEST METHOD /////////////////
+    ////////////////////////////////////////////    
+    private Triangle t1 = null;
+
+    private void test(Graphics2D g) {
+        Point p1 = new Point(20, 20);
+        Point p2 = new Point(60, 100);
+        Point p3 = new Point(100, 20);
+
+        Line l1 = new Line(p1, p2, Line.BORDER_OUTER_SEGMENT);
+        Line l2 = new Line(p2, p3, Line.BORDER_OUTER_SEGMENT);
+        Line l3 = new Line(p3, p1, Line.BORDER_OUTER_SEGMENT);
+
+        List<Line> lines = new ArrayList<>();
+        lines.add(l1);
+        lines.add(l2);
+        lines.add(l3);
+
+        t1 = new Triangle(lines, Color.MAGENTA, 10);
+        t1.draw(g, scale);
+    }
+    ////////////////////////////////////////////
+    //////////////// END TEST //////////////////
+    ////////////////////////////////////////////   
+
     public void initValues() {
         this.lineVis = false;
         this.showGrid = true;
         this.stickGrid = false;
         this.fillShapes = false;
         this.multiSelect = false;
-        this.mode = Mode.DRAW;
+        this.mode = Mode.POINT;
+        this.lineMode = Line.BORDER_OUTER_SEGMENT;
 
         this.scale = 1;
 
@@ -73,6 +104,7 @@ public class DrawingPanel extends javax.swing.JPanel {
         this.prevY = -1;
         this.dragVis = false;
         this.selectedObjects = new ArrayList<>();
+        this.startLinePoint = null;
 
         this.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
@@ -115,11 +147,12 @@ public class DrawingPanel extends javax.swing.JPanel {
 //        if (mode == Mode.DRAW && mouseLine.getStartPoint() != null && mouseLine.getEndPoint() != null) {
 //            mouseLine.draw((Graphics2D) g, scale);
 //        }
-
         // Draw polygon
         if (te != null && te.getPolygon() != null) {
             te.getPolygon().draw((Graphics2D) g, scale);
         }
+
+        //test((Graphics2D) g);
     }
 
     public void refresh() {
@@ -128,7 +161,8 @@ public class DrawingPanel extends javax.swing.JPanel {
     }
 
     private void renderDraggedSelection() {
-        if (mode == Mode.SELECT && !selectedObjects.isEmpty()) {
+        //if (mode == Mode.SELECT && !selectedObjects.isEmpty()) {
+        if (!selectedObjects.isEmpty()) {
             Graphics2D g2d = (Graphics2D) getGraphics();
             g2d.setXORMode(Color.GRAY);
             te.getPolygon().draw(g2d, scale);
@@ -137,7 +171,7 @@ public class DrawingPanel extends javax.swing.JPanel {
     }
 
     private void renderLine() {
-        if (mode == Mode.DRAW && mouseLine != null && mouseLine.getStartPoint() != null && mouseLine.getEndPoint() != null) {
+        if (mode == Mode.LINE && mouseLine != null && mouseLine.getStartPoint() != null && mouseLine.getEndPoint() != null) {
             Graphics2D g2d = (Graphics2D) getGraphics();
             g2d.setXORMode(Color.GRAY);
             mouseLine.draw(g2d, scale);
@@ -150,10 +184,12 @@ public class DrawingPanel extends javax.swing.JPanel {
             renderLine();
         }
         //if (mouseLine.getStartPoint() == null && !te.getPolygon().getPoints().isEmpty()) {
-        mouseLine = new Line(te.getPolygon().getMouseLineStartPoint());
+        //mouseLine = new Line(null);
         //}
-        mouseLine.setEndPoint(new Point(e.getX(), e.getY()));
-        renderLine();
+        if (mouseLine != null) {
+            mouseLine.setEndPoint(new Point(e.getX(), e.getY()));
+            renderLine();
+        }
     }
 
     private void moveSelection(MouseEvent e) {
@@ -180,7 +216,7 @@ public class DrawingPanel extends javax.swing.JPanel {
         return (int) (base * grid.getSpacing() * scale);
     }
 
-    private void mouseClickDrawMode(java.awt.event.MouseEvent evt) {
+    private void mouseClickPointMode(java.awt.event.MouseEvent evt) {
         int x = evt.getX();
         int y = evt.getY();
         if (stickGrid) {
@@ -188,33 +224,68 @@ public class DrawingPanel extends javax.swing.JPanel {
             y = roundToSpacing(y);
         }
 
-        IDrawable connectPoint = te.getPolygon().checkSelection(x, y, false);
-        // TODO TIDY UP:        
+        IDrawable connectPoint = te.getPolygon().checkSelection(x, y, multiSelect);
+        // TODO TIDY UP:   
+        System.out.println((connectPoint == null));
         if (connectPoint == null || !(connectPoint instanceof Point)) {
             te.getPolygon().addPoint(x, y);
-        } else if (!te.getPolygon().canConnectToPoint((Point)connectPoint)) {
-            JOptionPane.showMessageDialog(this, "These two points can not be connected");
-        } else {
-            // TODO: ASK USER WETHER HE WANTS TO CONNECT OR HIGHLIGHT (CONTINUE FROM) THIS POINT
-            int reply = JOptionPane.showConfirmDialog(this,
-                    "Do you want to connect the segment to this point?",
-                    "Connect segments",
-                    JOptionPane.YES_NO_OPTION);
-            if (reply == JOptionPane.YES_OPTION) {
-                te.getPolygon().connectSegment((Point) connectPoint);
+
+            if (connectPoint instanceof Line) {
+                ((Line) connectPoint).setSelected(false);
+            }
+
+//        } else if (!te.getPolygon().canConnectToPoint((Point)connectPoint)) {
+//            JOptionPane.showMessageDialog(this, "These two points can not be connected");
+//        } else {
+//            // TODO: ASK USER WETHER HE WANTS TO CONNECT OR HIGHLIGHT (CONTINUE FROM) THIS POINT
+//            int reply = JOptionPane.showConfirmDialog(this,
+//                    "Do you want to connect the segment to this point?",
+//                    "Connect segments",
+//                    JOptionPane.YES_NO_OPTION);
+//            if (reply == JOptionPane.YES_OPTION) {
+//                te.getPolygon().connectSegment((Point) connectPoint);
+//            }
+//        }
+            te.getPolygon().clearSelection();
+        }
+        this.update(this.getGraphics());
+    }
+
+    private void mouseClickLineMode(java.awt.event.MouseEvent evt) {
+        IDrawable selectedObject = te.getPolygon().checkSelection(evt.getX(), evt.getY(), false);
+
+        if (selectedObject != null && selectedObject instanceof Point) {
+            if (startLinePoint == null) {
+                this.startLinePoint = (Point) selectedObject;
+                this.startLinePoint.setSelected(false);
+                this.startLinePoint.setHighlighted(true);
+                this.mouseLine = new Line(startLinePoint);
+            } else if (this.startLinePoint != (Point) selectedObject) {
+                te.getPolygon().addLine(new Line(startLinePoint, (Point) selectedObject, lineMode));
+                this.startLinePoint.setHighlighted(false);
+                this.startLinePoint = null;
+                this.mouseLine = null;
+                System.out.println("line added");
+            } else {
+                this.startLinePoint = null;
+                this.mouseLine = null;
+                ((Point) selectedObject).setHighlighted(false);
             }
         }
-        te.getPolygon().clearSelection();
-        
+
+        if (!(selectedObject instanceof Line)) {
+            te.getPolygon().clearSelection();
+        }
         this.update(this.getGraphics());
+    }
+
+    private void mouseClickKnotMode(java.awt.event.MouseEvent evt) {
+        System.out.println(t1.checkSelection(evt.getX(), evt.getY(), multiSelect));
     }
 
     private void mouseClickSelectMode(java.awt.event.MouseEvent evt) {
         te.getPolygon().checkSelection(evt.getX(), evt.getY(), multiSelect);
         this.update(this.getGraphics());
-    }
-
-    private void mouseClickLineMode(java.awt.event.MouseEvent evt) {
     }
 
     // <editor-fold desc="All getter & setter methods are placed within">
@@ -252,6 +323,10 @@ public class DrawingPanel extends javax.swing.JPanel {
         this.mode = mode;
         te.getPolygon().checkSelection(0, 0, false);
         this.update(this.getGraphics());
+    }
+
+    public void setLineMode(int mode) {
+        this.lineMode = mode;
     }
 
     void zoomIn() {
@@ -337,7 +412,7 @@ public class DrawingPanel extends javax.swing.JPanel {
         multiSelect = evt.isControlDown();
 
         // Check if pressed key is 'delete'
-        if (evt.getKeyCode() == 127 && mode == Mode.SELECT) {
+        if (evt.getKeyCode() == 127) { // && mode == Mode.SELECT) {
             te.getPolygon().deleteSelectedItems();
             refresh();
             //this.repaint();
@@ -351,14 +426,30 @@ public class DrawingPanel extends javax.swing.JPanel {
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
         if (prevX == -1 && prevY == -1) {
-            if (mode == Mode.DRAW) {
-                mouseClickDrawMode(evt);
+//            if (mode == Mode.POINT) {
+//                mouseClickPointMode(evt);
+//
+//            } else if (mode == Mode.SELECT) {
+//                mouseClickSelectMode(evt);
+//
+//            } else if (mode == Mode.LINE) {
+//                mouseClickLineMode(evt);
+//            }
 
-            } else if (mode == Mode.SELECT) {
-                mouseClickSelectMode(evt);
+            switch (mode) {
+                case POINT:
+                    mouseClickPointMode(evt);
+                    break;
+                case LINE:
+                    mouseClickLineMode(evt);
+                    break;
+                case KNOT:
+                    mouseClickKnotMode(evt);
+                    break;
+                case SELECT:
+                    mouseClickLineMode(evt);
+                    break;
 
-            } else if (mode == Mode.LINE) {
-                mouseClickLineMode(evt);
             }
         } else {
             this.prevX = -1;
@@ -366,7 +457,7 @@ public class DrawingPanel extends javax.swing.JPanel {
             if (!this.selectedObjects.isEmpty()) {
                 this.refresh();
             }
-            
+
             this.selectedObjects = new ArrayList<>();
         }
     }//GEN-LAST:event_formMouseReleased
