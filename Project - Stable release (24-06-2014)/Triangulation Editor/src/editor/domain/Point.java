@@ -62,22 +62,6 @@ public class Point implements IDrawable, Serializable {
         } catch (InternalError ex) {
             System.out.println("Java Internal Error: \"Something not implemented yet\".");
         }
-        
-        // Draw knots
-        Knot previous = null;
-        for(Knot k : knots) {
-            g.setColor(Color.BLACK);
-            
-            if (previous == null) {
-                g.drawLine(x, y, k.getX(), k.getY());
-            } else {
-                g.drawLine(previous.getX(), previous.getY(), k.getX(), k.getY());
-            }
-            
-            k.draw(g, scale);
-            previous = k;            
-        }
-        
     }
 
     @Override

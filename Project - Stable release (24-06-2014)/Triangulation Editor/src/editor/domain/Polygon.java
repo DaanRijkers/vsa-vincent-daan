@@ -7,6 +7,7 @@ package editor.domain;
 
 import editor.service.MessageService;
 import editor.service.TriangulateService;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,12 +22,14 @@ public class Polygon implements IDrawable, Serializable {
     private List<Point> points;
     private List<Line> lines;
     private List<Triangle> triangles;
+    private List<Knot> knots;
     private boolean completed;
 
     public Polygon() {
         this.points = new ArrayList<>();
         this.lines = new ArrayList<>();
         this.triangles = new ArrayList<>();
+        this.knots = new ArrayList<>();
     }
 
     public Polygon(List<Point> points, List<Line> lines, List<Triangle> triangles) {
@@ -68,6 +71,15 @@ public class Polygon implements IDrawable, Serializable {
 
             this.lines.add(line);
         }
+    }
+    
+    public void addKnot(int x, int y, IDrawable prev) {
+        
+        for(Knot k : knots) {
+            if(k.getPrevious() == prev)
+                return;
+        }
+        knots.add(new Knot(x, y, prev));
     }
 
     private void setLastAsHightlighted() {
@@ -243,6 +255,10 @@ public class Polygon implements IDrawable, Serializable {
         for (IDrawable p : this.points) {
             p.draw(g, scale);
         }
+        
+        for (IDrawable k : this.knots) {
+            k.draw(g, scale);
+        }
     }
 
     @Override
@@ -251,6 +267,7 @@ public class Polygon implements IDrawable, Serializable {
         drawables.addAll(points);
         drawables.addAll(lines);
         drawables.addAll(triangles);
+        drawables.addAll(knots);
 
         IDrawable selected = null;
         for (IDrawable x : drawables) {
@@ -294,6 +311,12 @@ public class Polygon implements IDrawable, Serializable {
                 sp.add(l);
             }
         }
+        
+        for (Knot k : knots) {
+            if (k.isSelected()) {
+                sp.add(k);
+            }
+        }
 
         return sp;
     }
@@ -320,6 +343,10 @@ public class Polygon implements IDrawable, Serializable {
 
     public void setTriangles(List<Triangle> triangles) {
         this.triangles = triangles;
+    }
+
+    public List<Knot> getKnots() {
+        return knots;
     }
 
     public boolean isCompleted() {

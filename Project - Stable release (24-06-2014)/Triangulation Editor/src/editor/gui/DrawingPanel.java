@@ -84,13 +84,13 @@ public class DrawingPanel extends javax.swing.JPanel {
         t1 = new Triangle(lines, Color.MAGENTA, 10);
         t1.draw(g, scale);
         
-        Knot k1 = new Knot(200, 200);
-        Knot k2 = new Knot(400, 100);
-        Point p4 = new Point(350, 300); 
-        p4.getKnots().add(k1);
-        p4.getKnots().add(k2);
-        
-        p4.draw(g, scale);
+//        Knot k1 = new Knot(200, 200);
+//        Knot k2 = new Knot(400, 100);
+//        Point p4 = new Point(350, 300); 
+//        p4.getKnots().add(k1);
+//        p4.getKnots().add(k2);
+//        
+//        p4.draw(g, scale);
     }
     ////////////////////////////////////////////
     //////////////// END TEST //////////////////
@@ -159,7 +159,7 @@ public class DrawingPanel extends javax.swing.JPanel {
             te.getPolygon().draw((Graphics2D) g, scale);
         }
 
-        test((Graphics2D) g);
+        //test((Graphics2D) g);
     }
 
     public void refresh() {
@@ -287,16 +287,22 @@ public class DrawingPanel extends javax.swing.JPanel {
     }
 
     private void mouseClickKnotMode(java.awt.event.MouseEvent evt) {
-        IDrawable d = te.getPolygon().checkSelection(evt.getX(), evt.getY(), multiSelect);
+        //IDrawable d = te.getPolygon().checkSelection(evt.getX(), evt.getY(), multiSelect);
 
-//        if (d == this.selectedTriangle) {
-//            this.selectedTriangle = null;
-//            this.update(this.getGraphics());
-//        } else if (d instanceof Triangle) {
-//            this.selectedTriangle = (Triangle) d;
-//            this.refresh();
-//        }
-
+        IDrawable selectedObject = te.getPolygon().checkSelection(evt.getX(), evt.getY(), false);
+        
+        if (selectedObject instanceof Point || selectedObject instanceof Knot) {
+            selectedObjects.clear();
+            selectedObjects.add(selectedObject);
+        } else if (selectedObject == null) {
+            if (selectedObjects.size() == 1){
+                te.getPolygon().addKnot(evt.getX(), evt.getY(), selectedObjects.get(0));
+                selectedObjects.clear();
+            } else {
+                selectedObjects.clear();
+            }
+        }
+        this.update(this.getGraphics());
     }
 
     private void mouseClickSelectMode(java.awt.event.MouseEvent evt) {
