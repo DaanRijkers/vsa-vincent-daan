@@ -268,7 +268,7 @@ public class DrawingPanel extends javax.swing.JPanel {
                 this.startLinePoint.setHighlighted(true);
                 this.mouseLine = new Line(startLinePoint);
             } else if (this.startLinePoint != (Point) selectedObject) {
-                te.getPolygon().addLine(new Line(startLinePoint, (Point) selectedObject, lineMode));
+                te.getPolygon().addLine(new Line(startLinePoint, (Point) selectedObject, lineMode), true);
                 this.startLinePoint.setHighlighted(false);
                 this.startLinePoint = null;
                 this.mouseLine = null;
