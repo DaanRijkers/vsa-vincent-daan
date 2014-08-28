@@ -168,14 +168,14 @@ public class TriangulateService {
     }
 
     public static boolean checkPointInsidePolygon(Polygon pol, Point p) {
-        
+
         List<Line> rays = new ArrayList<>();
-        
+
         rays.add(new Line(p, new Point(p.getX(), 0000), Line.BORDER_OUTER_SEGMENT)); // Line upwards
         rays.add(new Line(p, new Point(p.getX(), 9000), Line.BORDER_OUTER_SEGMENT)); // Line downwards
         rays.add(new Line(p, new Point(0000, p.getY()), Line.BORDER_OUTER_SEGMENT)); // Line left sideways
         rays.add(new Line(p, new Point(9000, p.getY()), Line.BORDER_OUTER_SEGMENT)); // Line right sideways
-                
+
         rays.add(new Line(p, new Point(p.getX() - 9000, p.getY() - 9000), Line.BORDER_OUTER_SEGMENT)); // Line diagionally upper left
         rays.add(new Line(p, new Point(p.getX() + 9000, p.getY() - 9000), Line.BORDER_OUTER_SEGMENT)); // Line diagionally upper right
         rays.add(new Line(p, new Point(p.getX() - 9000, p.getY() + 9000), Line.BORDER_OUTER_SEGMENT)); // Line diagionally lower left
@@ -186,12 +186,14 @@ public class TriangulateService {
 
         for (Line r : rays) {
 
+            boolean hasHitOuter = false;
             for (Line l : pol.getLines()) {
 
                 boolean hit = doLinesCross(r, l, true);
-                if (hit && l.getType() == Line.BORDER_OUTER_SEGMENT) {
+                if (hit && l.getType() == Line.BORDER_OUTER_SEGMENT && !hasHitOuter) {
                     outerHits++;
-                    
+                    hasHitOuter = true;
+
                 } else if (hit && l.getType() == Line.BORDER_INNER_SEGMENT) {
                     innerHits++;
                     break;
@@ -227,15 +229,50 @@ public class TriangulateService {
             int counter = 0;
             for (Point p2 : pol.getPoints()) {
 
-                if (counter > 1) {
+                if (counter > 15) {
                     break;
                 }
 
-                if (p1 == p2 || (innerPoints.contains(p1) && innerPoints.contains(p2))) {
+                //if (p1 == p2 || (innerPoints.contains(p1) && innerPoints.contains(p2))) {
+                //    continue;
+                //}
+                Line newLine = null;
+                if (p1 == p2) {
                     continue;
+                } else {
+                    Point lineMiddle = new Point((p1.getX() + p2.getX()) / 2, (p1.getY() + p2.getY()) / 2);
+
+                    if (p1.getX() == 442 && p2.getX() == 169) {
+                        int i = 7;
+                    }
+
+                    if (innerPoints.contains(p1) && innerPoints.contains(p2)) {
+                        if (!checkPointInsidePolygon(pol, lineMiddle)) {
+                            continue;
+                        }
+
+                        System.out.println(lineMiddle);
+                    } else if (outerPoints.contains(p1) && outerPoints.contains(p2)) {
+                        if (!checkPointInsidePolygon(pol, lineMiddle)) {
+                            continue;
+                        }
+                    }
+
                 }
 
-                Line newLine = new Line(p1, p2, Line.INNER_SEGMENT);
+//                } else if ((innerPoints.contains(p1) && innerPoints.contains(p2)) || 
+//                        (outerPoints.contains(p1) && outerPoints.contains(p2))) {
+//                    Point lineMiddle = new Point((p1.getX() + p2.getX()) / 2, (p1.getY() + p2.getY() / 2));
+//                    
+//                    if (innerPoints.contains(p2)) {
+//                        System.out.println("tadaaaa");
+//                    }
+//                    
+//                    if  (!checkPointInsidePolygon(pol, lineMiddle)) {
+//                        continue; 
+//                    }
+//                } 
+                newLine = new Line(p1, p2, Line.INNER_SEGMENT);
 
                 boolean crossed = false;
                 for (Line l : pol.getLines()) {
