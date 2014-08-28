@@ -23,26 +23,33 @@ public class Knot implements IDrawable, Serializable {
     private int x;
     private int y;
     private int size;
+    private IDrawable previous;
 
     private boolean selected;
 
-    public Knot() {
-        this.x = 0;
-        this.y = 0;
-        this.size = 10;
-        this.selected = false;
-    }
+//    public Knot() {
+//        this.x = 0;
+//        this.y = 0;
+//        this.size = 10;
+//        this.selected = false;
+//    }
 
-    public Knot(int x, int y) {
+    public Knot(int x, int y, IDrawable prev) {
         this.x = x;
         this.y = y;
         this.size = 10;
         this.selected = false;
+        this.previous = prev;
     }
 
     @Override
     public void draw(Graphics2D g, double scale) {
         g.setColor((selected) ? SELECTED_COLOR : NORMAL_COLOR);
+        
+        if(previous instanceof Point)
+            g.drawLine(((Point)previous).getX(), ((Point)previous).getY(), x, y);
+        else
+            g.drawLine(((Knot)previous).getX(), ((Knot)previous).getY(), x, y);
 
         Ellipse2D.Double circle = new Ellipse2D.Double(x - 5, y - 5, size, size);
         //g.fill(circle);
@@ -96,6 +103,10 @@ public class Knot implements IDrawable, Serializable {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public IDrawable getPrevious() {
+        return previous;
     }
 
     public boolean isSelected() {
