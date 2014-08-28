@@ -54,21 +54,25 @@ public class Polygon implements IDrawable, Serializable {
         //setLastAsHightlighted();
     }
 
-    public void addLine(Line line) {
+    public void addLine(Line line, boolean doChecks) {
 
-        if (checkDoubleLine(line.getStartPoint(), line.getEndPoint())) {
-            MessageService.showDoubleLineMessage();
-        } else if (line.getStartPoint() == line.getEndPoint()) {
-            MessageService.showLineToSelfMessage();
-        } else if ((line.getType() == Line.BORDER_OUTER_SEGMENT || line.getType() == Line.BORDER_INNER_SEGMENT)
-                && (countLines(line.getStartPoint(), Line.BORDER_OUTER_SEGMENT) > 1
-                || countLines(line.getStartPoint(), Line.BORDER_INNER_SEGMENT) > 1
-                || countLines(line.getEndPoint(), Line.BORDER_OUTER_SEGMENT) > 1
-                || countLines(line.getEndPoint(), Line.BORDER_INNER_SEGMENT) > 1)) {
-            MessageService.showToManyLinesMessage();
+        if (doChecks) {
+            if (checkDoubleLine(line.getStartPoint(), line.getEndPoint())) {
+                MessageService.showDoubleLineMessage();
+            } else if (line.getStartPoint() == line.getEndPoint()) {
+                MessageService.showLineToSelfMessage();
+            } else if ((line.getType() == Line.BORDER_OUTER_SEGMENT || line.getType() == Line.BORDER_INNER_SEGMENT)
+                    && (countLines(line.getStartPoint(), Line.BORDER_OUTER_SEGMENT) > 1
+                    || countLines(line.getStartPoint(), Line.BORDER_INNER_SEGMENT) > 1
+                    || countLines(line.getEndPoint(), Line.BORDER_OUTER_SEGMENT) > 1
+                    || countLines(line.getEndPoint(), Line.BORDER_INNER_SEGMENT) > 1)) {
+                MessageService.showToManyLinesMessage();
+            } else {
+                TriangulateService.determineTrianglesFromNewLine(this, line);
+                this.lines.add(line);
+            }
         } else {
             TriangulateService.determineTrianglesFromNewLine(this, line);
-
             this.lines.add(line);
         }
     }
@@ -151,6 +155,16 @@ public class Polygon implements IDrawable, Serializable {
 //        }
     }
 
+    public void deleteInnerLines() {
+        List<Line> innerLines = new ArrayList<>();
+        for (Line l : lines) {
+            if (l.getType() == Line.INNER_SEGMENT) {
+                innerLines.add(l);
+            }
+        }
+        lines.removeAll(innerLines);
+    }
+
     public void deleteSelectedItems() {
         List<Point> selectedPoints = new ArrayList<>();
         List<Line> selectedLines = new ArrayList<>();
@@ -181,9 +195,9 @@ public class Polygon implements IDrawable, Serializable {
                 }
             }
         }
-        
+
         for (Line l : selectedLines) {
-            for (Triangle t: triangles) {
+            for (Triangle t : triangles) {
                 if (t.containsLine(l)) {
                     selectedTriangles.add(t);
                 }

@@ -9,6 +9,7 @@ import editor.domain.Line;
 import editor.domain.Mode;
 import editor.domain.Polygon;
 import editor.service.FileHandler;
+import editor.service.TriangulateService;
 import editor.service.TriangulationService;
 import java.awt.KeyboardFocusManager;
 import java.beans.PropertyChangeEvent;
@@ -469,7 +470,7 @@ public class EditorForm extends javax.swing.JFrame {
     }//GEN-LAST:event_menuZoomOutActionPerformed
 
     private void menuToolsAutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuToolsAutoActionPerformed
-        // TODO add your handling code here:
+        TriangulateService.autoTriangulatePolygon(te.getPolygon());
     }//GEN-LAST:event_menuToolsAutoActionPerformed
 
     private void menuToolsFillActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuToolsFillActionPerformed

@@ -48,6 +48,18 @@ public class Point implements IDrawable, Serializable {
         this.highlighted = false;
         this.knots = new ArrayList<>();
     }
+    
+    public boolean corresponds(Object o) {
+        if (o instanceof Point) {
+            Point p = (Point) o;
+
+            if (this.x == p.getX() && this.y == p.getY()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     @Override
     public void draw(Graphics2D g, double scale) {

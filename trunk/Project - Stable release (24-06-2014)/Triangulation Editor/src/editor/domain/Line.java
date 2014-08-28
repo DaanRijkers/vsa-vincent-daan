@@ -110,6 +110,9 @@ public class Line implements IDrawable, Serializable {
     public List<IDrawable> checkSelection(int mouseX, int mouseY, int width, int height, boolean multiSelect) {
         return null;
     }
+    
+ 
+    
 
     private boolean checkHorizontalLineSelection(int mouseX, int mouseY) {
         int minX = (startPoint.getX() < endPoint.getX()) ? startPoint.getX() : endPoint.getX();
