@@ -168,26 +168,18 @@ public class TriangulateService {
     }
 
     public static boolean checkPointInsidePolygon(Polygon pol, Point p) {
-
-        Line ray1 = new Line(p, new Point(p.getX(), 0000), Line.BORDER_OUTER_SEGMENT); // Line upwards
-        Line ray2 = new Line(p, new Point(p.getX(), 9000), Line.BORDER_OUTER_SEGMENT); // Line downwards
-        Line ray3 = new Line(p, new Point(0000, p.getY()), Line.BORDER_OUTER_SEGMENT); // Line left sideways
-        Line ray4 = new Line(p, new Point(9000, p.getY()), Line.BORDER_OUTER_SEGMENT); // Line right sideways
-                
-        Line ray5 = new Line(p, new Point(p.getX() - 9000, p.getY() - 9000), Line.BORDER_OUTER_SEGMENT); // Line diagionally upper left
-        Line ray6 = new Line(p, new Point(p.getX() + 9000, p.getY() - 9000), Line.BORDER_OUTER_SEGMENT); // Line diagionally upper right
-        Line ray7 = new Line(p, new Point(p.getX() - 9000, p.getY() + 9000), Line.BORDER_OUTER_SEGMENT); // Line diagionally lower left
-        Line ray8 = new Line(p, new Point(p.getX() + 9000, p.getY() + 9000), Line.BORDER_OUTER_SEGMENT);  // Line diagionally lower right
-
+        
         List<Line> rays = new ArrayList<>();
-        rays.add(ray1);
-        rays.add(ray2);
-        rays.add(ray3);
-        rays.add(ray4);
-        rays.add(ray5);
-        rays.add(ray6);
-        rays.add(ray7);
-        rays.add(ray8);
+        
+        rays.add(new Line(p, new Point(p.getX(), 0000), Line.BORDER_OUTER_SEGMENT)); // Line upwards
+        rays.add(new Line(p, new Point(p.getX(), 9000), Line.BORDER_OUTER_SEGMENT)); // Line downwards
+        rays.add(new Line(p, new Point(0000, p.getY()), Line.BORDER_OUTER_SEGMENT)); // Line left sideways
+        rays.add(new Line(p, new Point(9000, p.getY()), Line.BORDER_OUTER_SEGMENT)); // Line right sideways
+                
+        rays.add(new Line(p, new Point(p.getX() - 9000, p.getY() - 9000), Line.BORDER_OUTER_SEGMENT)); // Line diagionally upper left
+        rays.add(new Line(p, new Point(p.getX() + 9000, p.getY() - 9000), Line.BORDER_OUTER_SEGMENT)); // Line diagionally upper right
+        rays.add(new Line(p, new Point(p.getX() - 9000, p.getY() + 9000), Line.BORDER_OUTER_SEGMENT)); // Line diagionally lower left
+        rays.add(new Line(p, new Point(p.getX() + 9000, p.getY() + 9000), Line.BORDER_OUTER_SEGMENT));  // Line diagionally lower right
 
         int outerHits = 0;
         int innerHits = 0;
