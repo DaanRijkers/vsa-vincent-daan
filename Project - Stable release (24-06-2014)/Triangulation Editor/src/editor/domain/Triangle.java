@@ -44,7 +44,7 @@ public class Triangle implements IDrawable, Serializable {
             pointsSet.add(l.getStartPoint());
             pointsSet.add(l.getEndPoint());
         }
-        
+
         this.points = new ArrayList<>(pointsSet);
     }
 
@@ -70,22 +70,22 @@ public class Triangle implements IDrawable, Serializable {
         List<Line> innerLines = new ArrayList<>();
         innerLines.add(createInnerLine(lines.get(0), lines.get(1)));
         innerLines.add(createInnerLine(lines.get(1), lines.get(2)));
-        innerLines.add(createInnerLine(lines.get(2), lines.get(0)));        
-        
+        innerLines.add(createInnerLine(lines.get(2), lines.get(0)));
+
         return new Triangle(innerLines, Color.CYAN, 9001);
     }
-    
+
     private Line createInnerLine(Line l1, Line l2) {
-        
+
         int p1x = (l1.getStartPoint().getX() + l1.getEndPoint().getX()) / 2;
         int p1y = (l1.getStartPoint().getY() + l1.getEndPoint().getY()) / 2;
-                
+
         int p2x = (l2.getStartPoint().getX() + l2.getEndPoint().getX()) / 2;
         int p2y = (l2.getStartPoint().getY() + l2.getEndPoint().getY()) / 2;
-        
+
         Point p1 = new Point(p1x, p1y);
         Point p2 = new Point(p2x, p2y);
-        
+
         return new Line(p1, p2, Line.INNER_SEGMENT);
     }
 
@@ -111,18 +111,23 @@ public class Triangle implements IDrawable, Serializable {
 
         // Draw triangle
         g.setColor(color);
-        g.fillPolygon(x, y, points.size());
+        try {
 
-        // Draw clickable center
-        determineCenter();
-        g.setColor(Color.BLACK);
-        Ellipse2D.Double circle = new Ellipse2D.Double(center.getX() - 10, center.getY() - 10, 20, 20);
-        g.draw(circle);
+            g.fillPolygon(x, y, points.size());
 
-        // Draw triangle number
-        String text = String.valueOf(number);
-        text = (text.length() < 2) ? "0" + text : text;
-        g.drawString(text, center.getX() - 5, center.getY() + 5);
+            // Draw clickable center
+            determineCenter();
+            g.setColor(Color.BLACK);
+            Ellipse2D.Double circle = new Ellipse2D.Double(center.getX() - 10, center.getY() - 10, 20, 20);
+            g.draw(circle);
+
+            // Draw triangle number
+            String text = String.valueOf(number);
+            text = (text.length() < 2) ? "0" + text : text;
+            g.drawString(text, center.getX() - 5, center.getY() + 5);
+        } catch (InternalError ex) {
+            System.out.println("Java Internal Error: \"Something not implemented yet\".");
+        }
     }
 
     @Override

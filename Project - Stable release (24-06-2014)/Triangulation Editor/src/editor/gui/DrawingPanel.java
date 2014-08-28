@@ -233,7 +233,7 @@ public class DrawingPanel extends javax.swing.JPanel {
 
         IDrawable connectPoint = te.getPolygon().checkSelection(x, y, multiSelect);
         // TODO TIDY UP:   
-        System.out.println((connectPoint == null));
+        //System.out.println((connectPoint == null));
         if (connectPoint == null || !(connectPoint instanceof Point)) {
             te.getPolygon().addPoint(x, y);
 

@@ -44,6 +44,7 @@ public class Polygon implements IDrawable, Serializable {
 
         //if (points.lastIndexOf(startPoint) == points.size() - 1) {
         points.add(new Point(x, y));
+        System.out.println(TriangulateService.checkPointInsidePolygon(this, new Point(x, y)));
         //} else {
         //    points.add(points.lastIndexOf(startPoint) + 1, newPoint);
         //}
