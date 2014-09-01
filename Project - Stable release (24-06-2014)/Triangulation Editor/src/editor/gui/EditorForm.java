@@ -9,6 +9,7 @@ import editor.domain.Line;
 import editor.domain.Mode;
 import editor.domain.Polygon;
 import editor.service.FileHandler;
+import editor.service.Options;
 import editor.service.TriangulateService;
 import editor.service.TriangulationService;
 import java.awt.KeyboardFocusManager;
@@ -73,9 +74,7 @@ public class EditorForm extends javax.swing.JFrame {
     private void setMode(JToggleButton btn, Mode mode) {
         btnPoint.setSelected((btnPoint == btn));
         btnLine.setSelected((btnLine == btn));
-        btnTriangle.setSelected((btnTriangle == btn));
         btnKnot.setSelected((btnKnot == btn));
-        btnSelect.setSelected((btnSelect == btn));
         panelGrid.setMode(mode);
         
         rdbtnInnerBorder.setVisible((btnLine == btn));
@@ -94,11 +93,9 @@ public class EditorForm extends javax.swing.JFrame {
 
         grpRadioButtons = new javax.swing.ButtonGroup();
         btnPoint = new javax.swing.JToggleButton();
-        btnSelect = new javax.swing.JToggleButton();
         btnLine = new javax.swing.JToggleButton();
         panelGrid = new editor.gui.DrawingPanel();
         lblCoordinates = new javax.swing.JLabel();
-        btnTriangle = new javax.swing.JToggleButton();
         btnKnot = new javax.swing.JToggleButton();
         rdbtnOuterBorder = new javax.swing.JRadioButton();
         rdbtnInnerBorder = new javax.swing.JRadioButton();
@@ -113,8 +110,6 @@ public class EditorForm extends javax.swing.JFrame {
         menuEditSelect = new javax.swing.JMenuItem();
         menuEditDeselect = new javax.swing.JMenuItem();
         menuEditDelete = new javax.swing.JMenuItem();
-        menuFileHori = new javax.swing.JMenuItem();
-        menuFileVerti = new javax.swing.JMenuItem();
         menuView = new javax.swing.JMenu();
         menuViewGrid = new javax.swing.JCheckBoxMenuItem();
         menuViewScale = new javax.swing.JCheckBoxMenuItem();
@@ -123,8 +118,8 @@ public class EditorForm extends javax.swing.JFrame {
         menuZoomOut = new javax.swing.JMenuItem();
         menuTools = new javax.swing.JMenu();
         menuToolsAuto = new javax.swing.JCheckBoxMenuItem();
-        menuToolsFill = new javax.swing.JCheckBoxMenuItem();
         menuToolsStick = new javax.swing.JCheckBoxMenuItem();
+        menuToolsOptions = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Triangulation Editor");
@@ -133,13 +128,6 @@ public class EditorForm extends javax.swing.JFrame {
         btnPoint.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPointActionPerformed(evt);
-            }
-        });
-
-        btnSelect.setText("Select");
-        btnSelect.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSelectActionPerformed(evt);
             }
         });
 
@@ -159,13 +147,6 @@ public class EditorForm extends javax.swing.JFrame {
         });
 
         lblCoordinates.setText("x:- y:-");
-
-        btnTriangle.setText("Triangle");
-        btnTriangle.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTriangleActionPerformed(evt);
-            }
-        });
 
         btnKnot.setText("Knot");
         btnKnot.addActionListener(new java.awt.event.ActionListener() {
@@ -268,22 +249,6 @@ public class EditorForm extends javax.swing.JFrame {
         });
         menuEdit.add(menuEditDelete);
 
-        menuFileHori.setText("Flip horizontally");
-        menuFileHori.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuFileHoriActionPerformed(evt);
-            }
-        });
-        menuEdit.add(menuFileHori);
-
-        menuFileVerti.setText("Flip vertically");
-        menuFileVerti.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuFileVertiActionPerformed(evt);
-            }
-        });
-        menuEdit.add(menuFileVerti);
-
         jMenuBar1.add(menuEdit);
 
         menuView.setText("View");
@@ -298,6 +263,7 @@ public class EditorForm extends javax.swing.JFrame {
         });
         menuView.add(menuViewGrid);
 
+        menuViewScale.setSelected(true);
         menuViewScale.setText("Show scale");
         menuViewScale.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -340,14 +306,6 @@ public class EditorForm extends javax.swing.JFrame {
         });
         menuTools.add(menuToolsAuto);
 
-        menuToolsFill.setText("Fill polygons/triangles");
-        menuToolsFill.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuToolsFillActionPerformed(evt);
-            }
-        });
-        menuTools.add(menuToolsFill);
-
         menuToolsStick.setText("Stick to grid");
         menuToolsStick.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -355,6 +313,14 @@ public class EditorForm extends javax.swing.JFrame {
             }
         });
         menuTools.add(menuToolsStick);
+
+        menuToolsOptions.setText("Options");
+        menuToolsOptions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuToolsOptionsActionPerformed(evt);
+            }
+        });
+        menuTools.add(menuToolsOptions);
 
         jMenuBar1.add(menuTools);
 
@@ -370,8 +336,6 @@ public class EditorForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnLine, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnTriangle)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnKnot, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(rdbtnOuterBorder)
@@ -380,8 +344,6 @@ public class EditorForm extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(rdbtnInnerLine)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addComponent(lblCoordinates)
                 .addContainerGap())
             .addComponent(panelGrid, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -394,9 +356,7 @@ public class EditorForm extends javax.swing.JFrame {
                     .addComponent(btnPoint)
                     .addComponent(btnLine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblCoordinates)
-                    .addComponent(btnTriangle)
                     .addComponent(btnKnot)
-                    .addComponent(btnSelect)
                     .addComponent(rdbtnOuterBorder)
                     .addComponent(rdbtnInnerBorder)
                     .addComponent(rdbtnInnerLine))
@@ -445,20 +405,13 @@ public class EditorForm extends javax.swing.JFrame {
         panelGrid.refresh();
     }//GEN-LAST:event_menuEditDeleteActionPerformed
 
-    private void menuFileHoriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileHoriActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuFileHoriActionPerformed
-
-    private void menuFileVertiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileVertiActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuFileVertiActionPerformed
-
     private void menuViewGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuViewGridActionPerformed
         panelGrid.switchShowGrid();
     }//GEN-LAST:event_menuViewGridActionPerformed
 
     private void menuViewScaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuViewScaleActionPerformed
-        // TODO add your handling code here:
+        Options.setShowScale(!Options.isShowScale());  
+        panelGrid.refresh();
     }//GEN-LAST:event_menuViewScaleActionPerformed
 
     private void menuZoomInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuZoomInActionPerformed
@@ -473,10 +426,6 @@ public class EditorForm extends javax.swing.JFrame {
         TriangulateService.autoTriangulatePolygon(te.getPolygon());
     }//GEN-LAST:event_menuToolsAutoActionPerformed
 
-    private void menuToolsFillActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuToolsFillActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuToolsFillActionPerformed
-
     private void menuToolsStickActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuToolsStickActionPerformed
         panelGrid.setStickGrid(((JCheckBoxMenuItem) evt.getSource()).getState());
     }//GEN-LAST:event_menuToolsStickActionPerformed
@@ -485,11 +434,6 @@ public class EditorForm extends javax.swing.JFrame {
 
         setMode((JToggleButton) evt.getSource(), Mode.POINT);
     }//GEN-LAST:event_btnPointActionPerformed
-
-    private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
-
-        setMode((JToggleButton) evt.getSource(), Mode.SELECT);
-    }//GEN-LAST:event_btnSelectActionPerformed
 
     private void btnLineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLineActionPerformed
 //        Mode mode = Mode.LINE_BORDER_INNER;
@@ -507,10 +451,6 @@ public class EditorForm extends javax.swing.JFrame {
                 " y:" + (int) (evt.getY() / panelGrid.getScale()));
     }//GEN-LAST:event_panelGridMouseMoved
 
-    private void btnTriangleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTriangleActionPerformed
-        setMode((JToggleButton) evt.getSource(), Mode.TRIANGLE);
-    }//GEN-LAST:event_btnTriangleActionPerformed
-
     private void btnKnotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKnotActionPerformed
         setMode((JToggleButton) evt.getSource(), Mode.KNOT);
     }//GEN-LAST:event_btnKnotActionPerformed
@@ -527,6 +467,11 @@ public class EditorForm extends javax.swing.JFrame {
     private void rdbtnInnerLineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbtnInnerLineActionPerformed
         panelGrid.setLineMode(Line.INNER_SEGMENT);
     }//GEN-LAST:event_rdbtnInnerLineActionPerformed
+
+    private void menuToolsOptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuToolsOptionsActionPerformed
+        OptionsForm options = new OptionsForm();
+        options.setVisible(true);
+    }//GEN-LAST:event_menuToolsOptionsActionPerformed
 
     /**
      * @param args the command line arguments
@@ -567,8 +512,6 @@ public class EditorForm extends javax.swing.JFrame {
     private javax.swing.JToggleButton btnKnot;
     private javax.swing.JToggleButton btnLine;
     private javax.swing.JToggleButton btnPoint;
-    private javax.swing.JToggleButton btnSelect;
-    private javax.swing.JToggleButton btnTriangle;
     private javax.swing.ButtonGroup grpRadioButtons;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JLabel lblCoordinates;
@@ -577,15 +520,13 @@ public class EditorForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuEditDeselect;
     private javax.swing.JMenuItem menuEditSelect;
     private javax.swing.JMenu menuFile;
-    private javax.swing.JMenuItem menuFileHori;
     private javax.swing.JMenuItem menuFileNew;
     private javax.swing.JMenuItem menuFileOpen;
     private javax.swing.JMenuItem menuFileSave;
     private javax.swing.JMenuItem menuFileSaveAs;
-    private javax.swing.JMenuItem menuFileVerti;
     private javax.swing.JMenu menuTools;
     private javax.swing.JCheckBoxMenuItem menuToolsAuto;
-    private javax.swing.JCheckBoxMenuItem menuToolsFill;
+    private javax.swing.JMenuItem menuToolsOptions;
     private javax.swing.JCheckBoxMenuItem menuToolsStick;
     private javax.swing.JMenu menuView;
     private javax.swing.JCheckBoxMenuItem menuViewGrid;
