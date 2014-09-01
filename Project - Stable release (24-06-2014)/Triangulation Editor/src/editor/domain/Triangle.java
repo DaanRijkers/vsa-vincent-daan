@@ -5,6 +5,7 @@
  */
 package editor.domain;
 
+import editor.service.Options;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
@@ -115,16 +116,18 @@ public class Triangle implements IDrawable, Serializable {
 
             g.fillPolygon(x, y, points.size());
 
-            // Draw clickable center
-            determineCenter();
-            g.setColor(Color.BLACK);
-            Ellipse2D.Double circle = new Ellipse2D.Double(center.getX() - 10, center.getY() - 10, 20, 20);
-            g.draw(circle);
+            if (Options.isShowTriangleNumber()) {
+                // Draw center
+                determineCenter();
+                g.setColor(Color.BLACK);
+                Ellipse2D.Double circle = new Ellipse2D.Double(center.getX() - 10, center.getY() - 10, 20, 20);
+                g.draw(circle);
 
-            // Draw triangle number
-            String text = String.valueOf(number);
-            text = (text.length() < 2) ? "0" + text : text;
-            g.drawString(text, center.getX() - 5, center.getY() + 5);
+                // Draw triangle number
+                String text = String.valueOf(number);
+                text = (text.length() < 2) ? "0" + text : text;
+                g.drawString(text, center.getX() - 5, center.getY() + 5);
+            }
         } catch (InternalError ex) {
             System.out.println("Java Internal Error: \"Something not implemented yet\".");
         }
