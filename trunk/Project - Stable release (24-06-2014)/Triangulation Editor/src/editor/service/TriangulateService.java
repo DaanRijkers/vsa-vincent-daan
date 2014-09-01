@@ -23,6 +23,10 @@ public class TriangulateService {
 
     private static int nextTriangle = 0;
 
+    public static void resetAutonumeric() {
+        nextTriangle = 0;
+    }
+
     public static void determineTrianglesFromNewLine(Polygon p, Line newLine) {
 
         Point p1 = newLine.getStartPoint();
@@ -200,7 +204,7 @@ public class TriangulateService {
                 }
             }
         }
-        
+
         if (innerHits > 7) {
             return false;
         } else if (outerHits > 7) {
@@ -223,63 +227,61 @@ public class TriangulateService {
         combined.addAll(innerPoints);
         combined.addAll(outerPoints);
 
-        //Point p1 = pol.getPoints().get(0);
         for (Point p1 : combined) {
 
             int counter = 0;
             for (Point p2 : pol.getPoints()) {
 
-                if (counter > 15) {
+                // Check if this point already has enough lines attached to it
+                if (!loosePoints.contains(p1)
+                        && Options.getMaxNumberOfTrianglesOnPoint() > 1
+                        && counter > Options.getMaxNumberOfTrianglesOnPoint() - 1) {
+                    //&& pol.getLinesConnectedToPoint(p2).size() >= Options.getMaxNumberOfTrianglesOnPoint()) {
                     break;
                 }
 
-                //if (p1 == p2 || (innerPoints.contains(p1) && innerPoints.contains(p2))) {
-                //    continue;
-                //}
-                Line newLine = null;
+                Line newLine;
+                boolean crossed = false;
+
                 if (p1 == p2) {
                     continue;
+
                 } else {
-                    Point lineMiddle = new Point((p1.getX() + p2.getX()) / 2, (p1.getY() + p2.getY()) / 2);
 
-                    if (p1.getX() == 442 && p2.getX() == 169) {
-                        int i = 7;
-                    }
+                    // Check if the newly created line would cross any other lines
+                    newLine = new Line(p1, p2, Line.INNER_SEGMENT);
+                    for (Line l : pol.getLines()) {
+                        crossed = doLinesCross(newLine, l, true);
 
-                    if (innerPoints.contains(p1) && innerPoints.contains(p2)) {
-                        if (!checkPointInsidePolygon(pol, lineMiddle)) {
-                            continue;
-                        }
-
-                        System.out.println(lineMiddle);
-                    } else if (outerPoints.contains(p1) && outerPoints.contains(p2)) {
-                        if (!checkPointInsidePolygon(pol, lineMiddle)) {
-                            continue;
+                        if (crossed) {
+                            break;
                         }
                     }
 
-                }
+                    // Check if points on the line fall outside of the polygon
+                    // Number of checks per line is specified in the options menu
+                    if (Options.getOutOfPolygonCheck() > 0) {
+                        boolean outside = false;
+                        int amount = Options.getOutOfPolygonCheck() + 1;
+                        
+                        for (int i = 0; i < Options.getOutOfPolygonCheck(); i++) {
 
-//                } else if ((innerPoints.contains(p1) && innerPoints.contains(p2)) || 
-//                        (outerPoints.contains(p1) && outerPoints.contains(p2))) {
-//                    Point lineMiddle = new Point((p1.getX() + p2.getX()) / 2, (p1.getY() + p2.getY() / 2));
-//                    
-//                    if (innerPoints.contains(p2)) {
-//                        System.out.println("tadaaaa");
-//                    }
-//                    
-//                    if  (!checkPointInsidePolygon(pol, lineMiddle)) {
-//                        continue; 
-//                    }
-//                } 
-                newLine = new Line(p1, p2, Line.INNER_SEGMENT);
+                            int xAddition = ((p2.getX() - p1.getX()) / amount) * (i + 1);
+                            int yAddition = ((p2.getY() - p1.getY()) / amount) * (i + 1);
 
-                boolean crossed = false;
-                for (Line l : pol.getLines()) {
-                    crossed = doLinesCross(newLine, l, true);
+                            Point pointOnLine = new Point(p1.getX() + xAddition, p1.getY() + yAddition);
 
-                    if (crossed) {
-                        break;
+                            if ((innerPoints.contains(p1) && innerPoints.contains(p2))
+                                    || (outerPoints.contains(p1) && outerPoints.contains(p2))) {
+                                if (!checkPointInsidePolygon(pol, pointOnLine)) {
+                                    outside = true;
+                                }
+                            }
+                        }
+
+                        if (outside) {
+                            continue;
+                        }
                     }
                 }
 
@@ -288,7 +290,6 @@ public class TriangulateService {
                     counter++;
                 }
             }
-
         }
     }
 }

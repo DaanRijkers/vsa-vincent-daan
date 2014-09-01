@@ -24,9 +24,11 @@ public class TriangulationService {
     public void clearFile() {
         this.polygon = new Polygon();
         FileHandler.clearOpenedFile();
+        TriangulateService.resetAutonumeric();
     }
     
     public Polygon loadFile() {
+        TriangulateService.resetAutonumeric();
         this.polygon = FileHandler.readFromFile();
         return polygon;
     }

@@ -52,7 +52,7 @@ public class DrawingPanel extends javax.swing.JPanel {
     private boolean dragVis;
     private List<IDrawable> selectedObjects;
     private Point startLinePoint;
-    private Triangle selectedTriangle;
+    //private Triangle selectedTriangle;
 
     /**
      * Creates new form DrawingPanel
@@ -115,7 +115,7 @@ public class DrawingPanel extends javax.swing.JPanel {
         this.dragVis = false;
         this.selectedObjects = new ArrayList<>();
         this.startLinePoint = null;
-        this.selectedTriangle = null;
+        //this.selectedTriangle = null;
 
         this.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
@@ -344,7 +344,7 @@ public class DrawingPanel extends javax.swing.JPanel {
     public void setMode(Mode mode) {
         this.mode = mode;
         te.getPolygon().checkSelection(0, 0, false);
-        selectedTriangle = null;
+        //selectedTriangle = null;
         this.update(this.getGraphics());
     }
 

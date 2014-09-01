@@ -95,22 +95,6 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuEditDeleteActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="menuFileHori">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Flip horizontally"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuFileHoriActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="menuFileVerti">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Flip vertically"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuFileVertiActionPerformed"/>
-              </Events>
-            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="menuView">
@@ -132,6 +116,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JCheckBoxMenuItem" name="menuViewScale">
               <Properties>
+                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="Show scale"/>
               </Properties>
               <Events>
@@ -182,20 +167,20 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuToolsAutoActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="menuToolsFill">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Fill polygons/triangles"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuToolsFillActionPerformed"/>
-              </Events>
-            </MenuItem>
             <MenuItem class="javax.swing.JCheckBoxMenuItem" name="menuToolsStick">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Stick to grid"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuToolsStickActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="menuToolsOptions">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Options"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuToolsOptionsActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -233,8 +218,6 @@
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="btnLine" min="-2" pref="72" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="btnTriangle" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="btnKnot" min="-2" pref="72" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="rdbtnOuterBorder" min="-2" max="-2" attributes="0"/>
@@ -243,8 +226,6 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="rdbtnInnerLine" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
-              <Component id="btnSelect" min="-2" pref="47" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="lblCoordinates" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -259,9 +240,7 @@
                   <Component id="btnPoint" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnLine" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="lblCoordinates" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnTriangle" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnKnot" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnSelect" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="rdbtnOuterBorder" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="rdbtnInnerBorder" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="rdbtnInnerLine" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -279,14 +258,6 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPointActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JToggleButton" name="btnSelect">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Select"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSelectActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JToggleButton" name="btnLine">
@@ -312,14 +283,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="x:- y:-"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JToggleButton" name="btnTriangle">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Triangle"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTriangleActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JToggleButton" name="btnKnot">
       <Properties>
