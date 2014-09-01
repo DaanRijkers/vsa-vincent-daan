@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,6 +41,14 @@ public class Knot implements IDrawable, Serializable {
         this.size = 10;
         this.selected = false;
         this.previous = prev;
+    }
+    
+    public void drawKnotCheckField(ArrayList<Knot> knots){
+        knots.add(this);
+        if(previous instanceof Knot)
+            ((Knot)previous).drawKnotCheckField(knots);
+        else
+            ((Point)previous).drawKnotCheckField(knots);
     }
 
     @Override
