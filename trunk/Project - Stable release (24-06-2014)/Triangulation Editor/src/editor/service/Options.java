@@ -6,15 +6,16 @@
 
 package editor.service;
 
-import javax.swing.JSpinner;
-
 /**
  *
  * @author Daan
  */
 public class Options {
     
+    private static boolean showGrid = true;
     private static boolean showScale = true;
+    private static boolean showPointLocation = true;
+    private static boolean showTriangleNumber = true;
     
     // Options for auto-triangulating
     private static int NumberOfRayChecks = 8;
@@ -69,4 +70,30 @@ public class Options {
     public static void setMaxNumberOfTrianglesOnPoint(int value) {
         Options.MaxNumberOfTrianglesOnPoint = correctNegative(value);
     }     
+
+    public static boolean isShowGrid() {
+        return showGrid;
+    }
+
+    public static void setShowGrid(boolean showGrid) {
+        Options.showGrid = showGrid;
+    }
+
+    public static boolean isShowPointLocation() {
+        return showPointLocation;
+    }
+
+    public static void setShowPointLocation(boolean showPointLocation) {
+        Options.showPointLocation = showPointLocation;
+    }
+
+    public static boolean isShowTriangleNumber() {
+        return showTriangleNumber;
+    }
+
+    public static void setShowTriangleNumber(boolean showTriangleNumber) {
+        Options.showTriangleNumber = showTriangleNumber;
+    }
+    
+    
 }
