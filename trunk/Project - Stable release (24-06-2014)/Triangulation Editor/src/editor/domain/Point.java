@@ -5,6 +5,7 @@
  */
 package editor.domain;
 
+import editor.service.Options;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
@@ -28,7 +29,7 @@ public class Point implements IDrawable, Serializable {
 
     private boolean selected;
     private boolean highlighted;
-    
+
     private List<Knot> knots;
 
     public Point() {
@@ -48,7 +49,7 @@ public class Point implements IDrawable, Serializable {
         this.highlighted = false;
         this.knots = new ArrayList<>();
     }
-    
+
     public boolean corresponds(Object o) {
         if (o instanceof Point) {
             Point p = (Point) o;
@@ -60,9 +61,9 @@ public class Point implements IDrawable, Serializable {
 
         return false;
     }
-    
+
     public void drawKnotCheckField(ArrayList<Knot> knots) {
-        
+
     }
 
     @Override
@@ -73,10 +74,12 @@ public class Point implements IDrawable, Serializable {
         g.fill(circle);
 
         g.setColor(Color.BLACK);
-        try {
-            g.drawString(this.toString(), x - 2, y + 17);
-        } catch (InternalError ex) {
-            System.out.println("Java Internal Error: \"Something not implemented yet\".");
+        if (Options.isShowPointLocation()) {
+            try {
+                g.drawString(this.toString(), x - 2, y + 17);
+            } catch (InternalError ex) {
+                System.out.println("Java Internal Error: \"Something not implemented yet\".");
+            }
         }
     }
 
@@ -139,6 +142,5 @@ public class Point implements IDrawable, Serializable {
     public List<Knot> getKnots() {
         return knots;
     }
-    
-    
+
 }

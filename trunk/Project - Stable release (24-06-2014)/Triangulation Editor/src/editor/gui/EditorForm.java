@@ -114,6 +114,8 @@ public class EditorForm extends javax.swing.JFrame {
         menuView = new javax.swing.JMenu();
         menuViewGrid = new javax.swing.JCheckBoxMenuItem();
         menuViewScale = new javax.swing.JCheckBoxMenuItem();
+        menuViewLocations = new javax.swing.JCheckBoxMenuItem();
+        viewMenuNumbers = new javax.swing.JCheckBoxMenuItem();
         menuZoom = new javax.swing.JMenu();
         menuZoomIn = new javax.swing.JMenuItem();
         menuZoomOut = new javax.swing.JMenuItem();
@@ -273,6 +275,24 @@ public class EditorForm extends javax.swing.JFrame {
             }
         });
         menuView.add(menuViewScale);
+
+        menuViewLocations.setSelected(true);
+        menuViewLocations.setText("Show point locations");
+        menuViewLocations.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuViewLocationsActionPerformed(evt);
+            }
+        });
+        menuView.add(menuViewLocations);
+
+        viewMenuNumbers.setSelected(true);
+        viewMenuNumbers.setText("Show triangle numbers");
+        viewMenuNumbers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewMenuNumbersActionPerformed(evt);
+            }
+        });
+        menuView.add(viewMenuNumbers);
 
         menuZoom.setText("Zoom");
 
@@ -488,6 +508,16 @@ public class EditorForm extends javax.swing.JFrame {
         panelGrid.refresh();
     }//GEN-LAST:event_menuToolsTriangulateActionPerformed
 
+    private void menuViewLocationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuViewLocationsActionPerformed
+        Options.setShowPointLocation(!Options.isShowPointLocation());
+        panelGrid.refresh();
+    }//GEN-LAST:event_menuViewLocationsActionPerformed
+
+    private void viewMenuNumbersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewMenuNumbersActionPerformed
+        Options.setShowTriangleNumber(!Options.isShowTriangleNumber());
+        panelGrid.refresh();
+    }//GEN-LAST:event_viewMenuNumbersActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -546,6 +576,7 @@ public class EditorForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuToolsTriangulate;
     private javax.swing.JMenu menuView;
     private javax.swing.JCheckBoxMenuItem menuViewGrid;
+    private javax.swing.JCheckBoxMenuItem menuViewLocations;
     private javax.swing.JCheckBoxMenuItem menuViewScale;
     private javax.swing.JMenu menuZoom;
     private javax.swing.JMenuItem menuZoomIn;
@@ -554,5 +585,6 @@ public class EditorForm extends javax.swing.JFrame {
     private javax.swing.JRadioButton rdbtnInnerBorder;
     private javax.swing.JRadioButton rdbtnInnerLine;
     private javax.swing.JRadioButton rdbtnOuterBorder;
+    private javax.swing.JCheckBoxMenuItem viewMenuNumbers;
     // End of variables declaration//GEN-END:variables
 }
