@@ -170,6 +170,7 @@ public class Polygon implements IDrawable, Serializable {
         List<Point> selectedPoints = new ArrayList<>();
         List<Line> selectedLines = new ArrayList<>();
         List<Triangle> selectedTriangles = new ArrayList<>();
+        List<Knot> selectedKnots = new ArrayList<>();
 
         for (Point p : points) {
             if (p.isSelected()) {
@@ -204,12 +205,38 @@ public class Polygon implements IDrawable, Serializable {
                 }
             }
         }
+        
+        for (Knot k : knots) {
+            if (!selectedKnots.contains(k)) {
+                if (k.isSelected()) {
+                    selectedKnots.addAll(deleteKnotList(new ArrayList<Knot>(), k));
+                } else {
+                    for (Point p : selectedPoints) {
+                        if (k.getPrevious() == p) {
+                            selectedKnots.addAll(deleteKnotList(new ArrayList<Knot>(), k));
+                        }
+                    }
+                }
+            }
+        }
+        
+        
 
         points.removeAll(selectedPoints);
         lines.removeAll(selectedLines);
         triangles.removeAll(selectedTriangles);
+        knots.removeAll(selectedKnots);
 
         //setLastAsHightlighted();
+    }
+    
+    private ArrayList<Knot> deleteKnotList(ArrayList<Knot> deleteKnots, Knot knot){
+        deleteKnots.add(knot);
+        for (Knot k : knots) {
+            if (k.getPrevious() == knot)
+                return deleteKnotList(deleteKnots, k);
+        }
+        return deleteKnots;
     }
 
     public Point getMouseLineStartPoint() {
