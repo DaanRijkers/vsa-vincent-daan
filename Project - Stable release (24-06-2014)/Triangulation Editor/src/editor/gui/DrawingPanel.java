@@ -425,9 +425,9 @@ public class DrawingPanel extends javax.swing.JPanel {
         this.prevX = -1;
         this.prevY = -1;
 
-        //if (sp == null) {
-        this.selectedObjects = te.getPolygon().getSelectedObjects();
-        //}
+        if (te.getPolygon() != null) {
+            this.selectedObjects = te.getPolygon().getSelectedObjects();
+        }
     }//GEN-LAST:event_formMousePressed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
@@ -435,7 +435,7 @@ public class DrawingPanel extends javax.swing.JPanel {
         multiSelect = evt.isControlDown();
 
         // Check if pressed key is 'delete'
-        if (evt.getKeyCode() == 127) { // && mode == Mode.SELECT) {
+        if (evt.getKeyCode() == 127) { 
             te.getPolygon().deleteSelectedItems();
             refresh();
             //this.repaint();

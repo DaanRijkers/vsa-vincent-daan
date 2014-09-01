@@ -9,6 +9,7 @@ import editor.domain.Line;
 import editor.domain.Mode;
 import editor.domain.Polygon;
 import editor.service.FileHandler;
+import editor.service.MessageService;
 import editor.service.Options;
 import editor.service.TriangulateService;
 import editor.service.TriangulationService;
@@ -117,9 +118,10 @@ public class EditorForm extends javax.swing.JFrame {
         menuZoomIn = new javax.swing.JMenuItem();
         menuZoomOut = new javax.swing.JMenuItem();
         menuTools = new javax.swing.JMenu();
-        menuToolsAuto = new javax.swing.JCheckBoxMenuItem();
+        menuToolsTriangulate = new javax.swing.JMenuItem();
         menuToolsStick = new javax.swing.JCheckBoxMenuItem();
         menuToolsOptions = new javax.swing.JMenuItem();
+        menuToolsAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Triangulation Editor");
@@ -298,13 +300,13 @@ public class EditorForm extends javax.swing.JFrame {
 
         menuTools.setText("Tools");
 
-        menuToolsAuto.setText("Auto-triangulate");
-        menuToolsAuto.addActionListener(new java.awt.event.ActionListener() {
+        menuToolsTriangulate.setText("Auto-triangulate");
+        menuToolsTriangulate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuToolsAutoActionPerformed(evt);
+                menuToolsTriangulateActionPerformed(evt);
             }
         });
-        menuTools.add(menuToolsAuto);
+        menuTools.add(menuToolsTriangulate);
 
         menuToolsStick.setText("Stick to grid");
         menuToolsStick.addActionListener(new java.awt.event.ActionListener() {
@@ -321,6 +323,14 @@ public class EditorForm extends javax.swing.JFrame {
             }
         });
         menuTools.add(menuToolsOptions);
+
+        menuToolsAbout.setText("About");
+        menuToolsAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuToolsAboutActionPerformed(evt);
+            }
+        });
+        menuTools.add(menuToolsAbout);
 
         jMenuBar1.add(menuTools);
 
@@ -422,10 +432,6 @@ public class EditorForm extends javax.swing.JFrame {
         panelGrid.zoomOut();
     }//GEN-LAST:event_menuZoomOutActionPerformed
 
-    private void menuToolsAutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuToolsAutoActionPerformed
-        TriangulateService.autoTriangulatePolygon(te.getPolygon());
-    }//GEN-LAST:event_menuToolsAutoActionPerformed
-
     private void menuToolsStickActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuToolsStickActionPerformed
         panelGrid.setStickGrid(((JCheckBoxMenuItem) evt.getSource()).getState());
     }//GEN-LAST:event_menuToolsStickActionPerformed
@@ -472,6 +478,15 @@ public class EditorForm extends javax.swing.JFrame {
         OptionsForm options = new OptionsForm();
         options.setVisible(true);
     }//GEN-LAST:event_menuToolsOptionsActionPerformed
+
+    private void menuToolsAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuToolsAboutActionPerformed
+        MessageService.showAboutMessage();
+    }//GEN-LAST:event_menuToolsAboutActionPerformed
+
+    private void menuToolsTriangulateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuToolsTriangulateActionPerformed
+        TriangulateService.autoTriangulatePolygon(te.getPolygon());
+        panelGrid.refresh();
+    }//GEN-LAST:event_menuToolsTriangulateActionPerformed
 
     /**
      * @param args the command line arguments
@@ -525,9 +540,10 @@ public class EditorForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuFileSave;
     private javax.swing.JMenuItem menuFileSaveAs;
     private javax.swing.JMenu menuTools;
-    private javax.swing.JCheckBoxMenuItem menuToolsAuto;
+    private javax.swing.JMenuItem menuToolsAbout;
     private javax.swing.JMenuItem menuToolsOptions;
     private javax.swing.JCheckBoxMenuItem menuToolsStick;
+    private javax.swing.JMenuItem menuToolsTriangulate;
     private javax.swing.JMenu menuView;
     private javax.swing.JCheckBoxMenuItem menuViewGrid;
     private javax.swing.JCheckBoxMenuItem menuViewScale;

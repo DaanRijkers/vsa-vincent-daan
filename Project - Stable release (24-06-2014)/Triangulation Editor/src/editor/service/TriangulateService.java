@@ -27,6 +27,9 @@ public class TriangulateService {
         nextTriangle = 0;
     }
 
+    /*
+     *  Determines whether a triangle has been formed by adding given line
+     */
     public static void determineTrianglesFromNewLine(Polygon p, Line newLine) {
 
         Point p1 = newLine.getStartPoint();
@@ -71,6 +74,9 @@ public class TriangulateService {
         p.getTriangles().addAll(triangles);
     }
 
+    /* 
+     *  Creates triangle from given lines
+     */
     private static Triangle createTriangle(Line l1, Line l2, Line l3) {
 
         List<Line> ls = new ArrayList<>();
@@ -81,6 +87,9 @@ public class TriangulateService {
         return new Triangle(ls, Color.ORANGE, nextTriangle += 1);
     }
 
+    /*
+     *  Determines whether two lines cross eachother
+     */
     public static boolean doLinesCross(Line l1, Line l2, boolean excludeTouch) {
 
         Point l1a = l1.getStartPoint();
@@ -122,6 +131,23 @@ public class TriangulateService {
         return (ccw < 0.0) ? -1 : ((ccw > 0.0) ? 1 : 0);
     }
 
+    /*
+     *  Calculates the angle between two lines in degrees. 
+     */
+    public static double angleBetweenLines(Line l1, Line l2) {
+        double l1Angle = Math.atan2(l1.getStartPoint().getY() - l1.getEndPoint().getY(),
+                l1.getStartPoint().getX() - l1.getEndPoint().getX());
+        double l2Angle = Math.atan2(l2.getStartPoint().getY() - l2.getEndPoint().getY(),
+                l2.getStartPoint().getX() - l2.getEndPoint().getX());
+
+        //double angle = Math.toDegrees(l1Angle - l2Angle);        
+        //return (angle < 0) ? angle * -1 : angle;
+        return Math.toDegrees(l1Angle - l2Angle);
+    }
+
+    /* 
+     *  Checks if two lines have a single corresponding point
+     */
     public static boolean singularCorrespondingPoint(Line l1, Line l2) {
 
         if ((l1.getStartPoint().corresponds(l2.getStartPoint()) && !l1.getEndPoint().corresponds(l2.getEndPoint()))
@@ -135,6 +161,9 @@ public class TriangulateService {
         return false;
     }
 
+    /*
+     *  Retrieves all lines of specified type
+     */
     private static List<Point> sortPointsByLineType(Polygon pol, int type) {
 
         Set<Point> points = new HashSet<>();
@@ -149,6 +178,9 @@ public class TriangulateService {
         return new ArrayList<>(points);
     }
 
+    /*
+     *  Retrieves points which are not connected to any lines
+     */
     private static List<Point> findLoosePoints(Polygon pol) {
 
         List<Point> loosePoints = new ArrayList<>();
@@ -171,29 +203,28 @@ public class TriangulateService {
         return loosePoints;
     }
 
+    /*
+     *  Checks if a given point is inside of the polygon,
+     *  does so by checking if rays from the given point intersect with the lines from the polygon
+     *  [Is not 100% accurate]
+     */
     public static boolean checkPointInsidePolygon(Polygon pol, Point p) {
 
-        List<Line> rays = new ArrayList<>();
-
-        rays.add(new Line(p, new Point(p.getX(), 0000), Line.BORDER_OUTER_SEGMENT)); // Line upwards
-        rays.add(new Line(p, new Point(p.getX(), 9000), Line.BORDER_OUTER_SEGMENT)); // Line downwards
-        rays.add(new Line(p, new Point(0000, p.getY()), Line.BORDER_OUTER_SEGMENT)); // Line left sideways
-        rays.add(new Line(p, new Point(9000, p.getY()), Line.BORDER_OUTER_SEGMENT)); // Line right sideways
-
-        rays.add(new Line(p, new Point(p.getX() - 9000, p.getY() - 9000), Line.BORDER_OUTER_SEGMENT)); // Line diagionally upper left
-        rays.add(new Line(p, new Point(p.getX() + 9000, p.getY() - 9000), Line.BORDER_OUTER_SEGMENT)); // Line diagionally upper right
-        rays.add(new Line(p, new Point(p.getX() - 9000, p.getY() + 9000), Line.BORDER_OUTER_SEGMENT)); // Line diagionally lower left
-        rays.add(new Line(p, new Point(p.getX() + 9000, p.getY() + 9000), Line.BORDER_OUTER_SEGMENT));  // Line diagionally lower right
-
+        int radius = 9000;
         int outerHits = 0;
         int innerHits = 0;
+        int slices = Options.getNumberOfRayChecks();
+        
+        for (double i = 0; i < slices; i++) {
+            double x = radius * Math.sin(i / slices * 2 * Math.PI);
+            double y = radius * Math.cos(i / slices * 2 * Math.PI);
 
-        for (Line r : rays) {
+            Line ray = new Line(p, new Point((int) x + p.getX(), (int) y + p.getY()), Line.BORDER_OUTER_SEGMENT);
 
             boolean hasHitOuter = false;
             for (Line l : pol.getLines()) {
 
-                boolean hit = doLinesCross(r, l, true);
+                boolean hit = doLinesCross(ray, l, true);
                 if (hit && l.getType() == Line.BORDER_OUTER_SEGMENT && !hasHitOuter) {
                     outerHits++;
                     hasHitOuter = true;
@@ -205,16 +236,20 @@ public class TriangulateService {
             }
         }
 
-        if (innerHits > 7) {
+        if (innerHits > slices - 1) {
             return false;
-        } else if (outerHits > 7) {
+        } else if (outerHits > slices -1) {
             return true;
         }
         return false;
     }
 
-    public static void autoTriangulatePolygon(Polygon pol) {
 
+    /*
+     *  Tries to triangulate a given polygon
+     */
+    public static void autoTriangulatePolygon(Polygon pol) {
+        resetAutonumeric();
         pol.getTriangles().clear();
         pol.deleteInnerLines();
 
@@ -241,29 +276,39 @@ public class TriangulateService {
                 }
 
                 Line newLine;
-                boolean crossed = false;
+                boolean corrupt = false;
 
                 if (p1 == p2) {
                     continue;
 
                 } else {
 
-                    // Check if the newly created line would cross any other lines
+                    // Check if the newly created line would cross any other lines 
+                    // and if the angle is above the minimum specified in the options menu
                     newLine = new Line(p1, p2, Line.INNER_SEGMENT);
                     for (Line l : pol.getLines()) {
-                        crossed = doLinesCross(newLine, l, true);
+                        corrupt = doLinesCross(newLine, l, true);
 
-                        if (crossed) {
+                        if (!corrupt
+                                && ((l.getStartPoint() == p1 || l.getStartPoint() == p2)
+                                || (l.getEndPoint() == p1 || l.getEndPoint() == p2))) {
+
+                            double angle = angleBetweenLines(newLine, l);
+                            
+                            corrupt = ((double) Options.getMinAngleBetweenLines() * -1 < angle && angle < (double) Options.getMinAngleBetweenLines());
+                        }
+
+                        if (corrupt) {
                             break;
                         }
                     }
 
                     // Check if points on the line fall outside of the polygon
                     // Number of checks per line is specified in the options menu
-                    if (Options.getOutOfPolygonCheck() > 0) {
+                    if (Options.getOutOfPolygonCheck() > 0 && !corrupt) {
                         boolean outside = false;
                         int amount = Options.getOutOfPolygonCheck() + 1;
-                        
+
                         for (int i = 0; i < Options.getOutOfPolygonCheck(); i++) {
 
                             int xAddition = ((p2.getX() - p1.getX()) / amount) * (i + 1);
@@ -285,7 +330,7 @@ public class TriangulateService {
                     }
                 }
 
-                if (!crossed) {
+                if (!corrupt) {
                     pol.addLine(newLine, false);
                     counter++;
                 }
