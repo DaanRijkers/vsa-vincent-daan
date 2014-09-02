@@ -12,7 +12,7 @@ import editor.service.FileHandler;
 import editor.service.MessageService;
 import editor.service.Options;
 import editor.service.TriangulateService;
-import editor.service.TriangulationService;
+import editor.service.PolygonService;
 import java.awt.KeyboardFocusManager;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -25,14 +25,14 @@ import javax.swing.JToggleButton;
  */
 public class EditorForm extends javax.swing.JFrame {
 
-    private TriangulationService te;
+    private PolygonService te;
 
     /**
      * Creates new form EditorForm
      */
     public EditorForm() {
         initComponents();
-        this.te = new TriangulationService();
+        this.te = new PolygonService();
         panelGrid.setTriangulationEditor(te);
         setMode(btnPoint, Mode.POINT);
 
