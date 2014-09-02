@@ -13,11 +13,11 @@ import editor.domain.Polygon;
  *
  * @author Daan
  */
-public class TriangulationService {
+public class PolygonService {
     
     private Polygon polygon;
     
-    public TriangulationService() {
+    public PolygonService() {
         this.polygon = new Polygon();
     }
     

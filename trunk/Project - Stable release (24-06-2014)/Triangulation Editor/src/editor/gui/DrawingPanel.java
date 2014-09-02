@@ -12,19 +12,28 @@ import editor.domain.Line;
 import editor.domain.Mode;
 import editor.domain.Point;
 import editor.domain.Triangle;
-import editor.service.TriangulationService;
+import editor.service.KnotService;
+import editor.service.PolygonService;
+import java.awt.AWTException;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Robot;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.Ellipse2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageProducer;
+import java.awt.image.Raster;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import sun.dc.pr.Rasterizer;
 
 /**
  *
@@ -43,7 +52,7 @@ public class DrawingPanel extends javax.swing.JPanel {
 
     // Parameters for keeping scale
     private double scale;
-    private TriangulationService te;
+    private PolygonService te;
     private Grid grid;
     private Line mouseLine;
     // Parameters for dragging
@@ -294,12 +303,20 @@ public class DrawingPanel extends javax.swing.JPanel {
         if (selectedObject instanceof Point || selectedObject instanceof Knot) {
             selectedObjects.clear();
             selectedObjects.add(selectedObject);
+            te.getPolygon().setDrawKnotcheck(true);
         } else if (selectedObject == null) {
             if (selectedObjects.size() == 1){
-                te.getPolygon().addKnot(evt.getX(), evt.getY(), selectedObjects.get(0));
+                BufferedImage img = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB);
+                this.paint(img.createGraphics());
+                Color rColor = new Color(getGraphicsConfiguration().getColorModel().getRGB(img.getRGB(evt.getX(), evt.getY())));
+                System.out.println("Pixelcolor: "+rColor);
+                if(rColor.equals(KnotService.specialGreen))
+                    te.getPolygon().addKnot(evt.getX(), evt.getY(), selectedObjects.get(0));
                 selectedObjects.clear();
+                te.getPolygon().setDrawKnotcheck(false);
             } else {
                 selectedObjects.clear();
+                te.getPolygon().setDrawKnotcheck(false);
             }
         }
         this.update(this.getGraphics());
@@ -366,7 +383,7 @@ public class DrawingPanel extends javax.swing.JPanel {
         }
     }
 
-    public void setTriangulationEditor(TriangulationService te) {
+    public void setTriangulationEditor(PolygonService te) {
         this.te = te;
     }
 

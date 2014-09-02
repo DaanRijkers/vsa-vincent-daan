@@ -5,6 +5,7 @@
  */
 package editor.domain;
 
+import editor.service.KnotService;
 import editor.service.MessageService;
 import editor.service.TriangulateService;
 import java.awt.Color;
@@ -24,18 +25,22 @@ public class Polygon implements IDrawable, Serializable {
     private List<Triangle> triangles;
     private List<Knot> knots;
     private boolean completed;
+    private boolean drawKnotcheck;
 
     public Polygon() {
         this.points = new ArrayList<>();
         this.lines = new ArrayList<>();
         this.triangles = new ArrayList<>();
         this.knots = new ArrayList<>();
+        drawKnotcheck = false;
     }
 
-    public Polygon(List<Point> points, List<Line> lines, List<Triangle> triangles) {
+    public Polygon(List<Point> points, List<Line> lines, List<Triangle> triangles, List<Knot> knots) {
         this.points = points;
         this.lines = lines;
         this.triangles = triangles;
+        this.knots = knots;
+        drawKnotcheck = false;
     }
 
     public void addPoint(int x, int y) {
@@ -282,10 +287,78 @@ public class Polygon implements IDrawable, Serializable {
         }
 
     }
+    
+    public void drawKnotCheck(Graphics2D g, double scale) {
+        Point pointK = null;
+        List<Line> outerLines = new ArrayList<>();
+        List<Triangle> knotTriangles = new ArrayList<>();
+        
+        for (Point p : points) {
+            if(p.isSelected())
+                pointK = p;
+        }
+        if (pointK == null) {
+            return;
+        }
+        for (Triangle t : triangles) {
+            if (t.containsPoint(pointK)) {
+                knotTriangles.add(t);
+            }
+        }
+        for (Triangle t : knotTriangles) {
+            for (Line l : t.getLines()) {
+                if(l.getType() == 0 || l.getType() == 1)
+                    outerLines.add(l);
+            }
+        }
+        if(outerLines.isEmpty()){
+            drawInnerKnotCheck(pointK, knotTriangles, g, scale);
+        } else {
+            drawEdgeKnotCheck(pointK, outerLines, knotTriangles, g, scale);
+        }
+    }
+    
+    private void drawInnerKnotCheck(Point pointK, List<Triangle> knotTriangles, Graphics2D g, double scale){
+        System.out.println("drawing inner knot check");
+    }
+    
+    private void drawEdgeKnotCheck(Point pointK, List<Line> outerLines,  List<Triangle> knotTriangles, Graphics2D g, double scale){
+        double totalAngle = 0;
+        for (Triangle t : knotTriangles){
+            List<Line> angledLines = new ArrayList<>();
+            for (Line l : t.getLines()){
+                if(l.getStartPoint() == pointK || l.getEndPoint() == pointK){
+                    angledLines.add(l);
+                }
+            }
+            totalAngle += KnotService.angleDegreesBetween2Lines(pointK, angledLines.get(0), angledLines.get(1));
+            System.out.println("Total Angle of triangles: " + totalAngle);
+        }
+        double heading1 = KnotService.lineHeading(pointK, outerLines.get(0));
+        double heading2 = KnotService.lineHeading(pointK, outerLines.get(1));
+        double startAngle = 0;
+        double arcAngle = 0;
+        if(totalAngle > 180){
+            if (heading1 < heading2){
+                startAngle = heading2 - 90;
+            } else {
+                startAngle = heading1 - 90;
+            }
+            arcAngle = 360 - totalAngle;
+        } else {
+            if (heading2 - heading1 > 180){
+                startAngle = heading1 - 90;
+                arcAngle = totalAngle;
+            }
+        }
+        g.setColor(KnotService.specialGreen);
+        g.fillArc(pointK.getX()-50, pointK.getY()-50, 100, 100, (int)Math.round(startAngle), (int)Math.round(arcAngle));
+        System.out.println("drew cone, start angle: " + startAngle + " arc angle: " + arcAngle);
+    }
 
     @Override
     public void draw(Graphics2D g, double scale) {
-
+        
         for (IDrawable t : this.triangles) {
             t.draw(g, scale);
         }
@@ -301,6 +374,9 @@ public class Polygon implements IDrawable, Serializable {
         for (IDrawable k : this.knots) {
             k.draw(g, scale);
         }
+        
+        if(drawKnotcheck)
+            drawKnotCheck(g, scale);
     }
 
     @Override
@@ -397,5 +473,9 @@ public class Polygon implements IDrawable, Serializable {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public void setDrawKnotcheck(boolean drawKnotcheck) {
+        this.drawKnotcheck = drawKnotcheck;
     }
 }
