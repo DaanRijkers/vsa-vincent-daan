@@ -319,7 +319,9 @@ public class Polygon implements IDrawable, Serializable {
     }
     
     private void drawInnerKnotCheck(int size, List<Triangle> knotTriangles, Graphics2D g, double scale){
-        System.out.println("drawing inner knot check");
+        g.setColor(KnotService.specialGreen);
+        g.fillArc(knotCheck.getX()-(size/2), knotCheck.getY()-(size/2),
+                size, size, 0, 360);
     }
     
     private void drawEdgeKnotCheck(int size, List<Line> outerLines, List<Triangle> knotTriangles, Graphics2D g, double scale){
@@ -369,17 +371,17 @@ public class Polygon implements IDrawable, Serializable {
         for (IDrawable t : this.triangles) {
             t.draw(g, scale);
         }
+        
+        if(knotCheck != null)
+            drawKnotCheck(g, scale);
 
         for (IDrawable l : this.lines) {
             l.draw(g, scale);
         }
-
+        
         for (IDrawable p : this.points) {
             p.draw(g, scale);
         }
-        
-        if(knotCheck != null)
-            drawKnotCheck(g, scale);
         
         for (IDrawable k : this.knots) {
             k.draw(g, scale);
