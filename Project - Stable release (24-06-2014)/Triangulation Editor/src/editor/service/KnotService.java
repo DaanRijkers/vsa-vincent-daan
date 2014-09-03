@@ -8,6 +8,7 @@ package editor.service;
 
 import editor.domain.Line;
 import editor.domain.Point;
+import java.awt.BorderLayout;
 import java.awt.Color;
 
 /**
@@ -57,5 +58,15 @@ public class KnotService {
             heading = 360 - heading;
         }
         return heading;
+    }
+    
+    public static double lineLength(Line l){
+        Point p1 = l.getStartPoint();
+        Point p2 = l.getEndPoint();
+        int n1 = p1.getX() - p2.getX();
+        int n2 = p1.getY() - p2.getY();
+        double result = Math.sqrt(Math.pow(n1, 2) + Math.pow(n2, 2) );
+        
+        return result;
     }
 }

@@ -79,4 +79,17 @@ public class KnotServiceTest {
         assertEquals(roundedResult1, 135, 0.0);
     }
     
+    @Test
+    public void testLineLenght() {
+        System.out.println("lineLength");
+        
+        Point p1 = new Point(100, 100);
+        Point p2 = new Point(100, 200);
+        
+        Line l1 = new Line(p1, p2, 0);
+        double result1 = KnotService.lineLength(l1);
+        System.out.println(result1);
+        assertEquals(result1, 100, 0.0);
+    }
+    
 }
