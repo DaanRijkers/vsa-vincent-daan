@@ -2,6 +2,15 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/Vincent/Documents/Fontys/VSA/Project%20-%20Stable%20release%20(24-06-2014)/Triangulation%20Editor/src/editor/gui/DrawingPanel.java</file>
+            <file>file:/C:/Users/Vincent/Documents/Fontys/VSA/Project%20-%20Stable%20release%20(24-06-2014)/Triangulation%20Editor/src/editor/domain/Knot.java</file>
+            <file>file:/C:/Users/Vincent/Documents/Fontys/VSA/Project%20-%20Stable%20release%20(24-06-2014)/Triangulation%20Editor/src/editor/domain/Line.java</file>
+            <file>file:/C:/Users/Vincent/Documents/Fontys/VSA/Project%20-%20Stable%20release%20(24-06-2014)/Triangulation%20Editor/test/editor/service/KnotServiceTest.java</file>
+            <file>file:/C:/Users/Vincent/Documents/Fontys/VSA/Project%20-%20Stable%20release%20(24-06-2014)/Triangulation%20Editor/src/editor/domain/Polygon.java</file>
+            <file>file:/C:/Users/Vincent/Documents/Fontys/VSA/Project%20-%20Stable%20release%20(24-06-2014)/Triangulation%20Editor/src/editor/service/KnotService.java</file>
+            <file>file:/C:/Users/Vincent/Documents/Fontys/VSA/Project%20-%20Stable%20release%20(24-06-2014)/Triangulation%20Editor/src/editor/service/TriangulateService.java</file>
+            <file>file:/C:/Users/Vincent/Documents/Fontys/VSA/Project%20-%20Stable%20release%20(24-06-2014)/Triangulation%20Editor/src/editor/domain/Point.java</file>
+        </group>
     </open-files>
 </project-private>
