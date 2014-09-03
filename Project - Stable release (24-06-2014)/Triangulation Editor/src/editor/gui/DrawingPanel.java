@@ -309,13 +309,19 @@ public class DrawingPanel extends javax.swing.JPanel {
         IDrawable selectedObject = te.getPolygon().checkSelection(evt.getX(), evt.getY(), false);
         
         if (selectedObject instanceof Point) {
-            selectedObjects.clear();
-            selectedObjects.add(selectedObject);
-            te.getPolygon().setDrawKnotcheck((Point)selectedObject);
+            if (selectedObjects.size() > 0) {
+                selectedObjects.clear();
+                te.getPolygon().setDrawKnotcheck(null);
+            } else {
+                selectedObjects.add(selectedObject);
+                te.getPolygon().setDrawKnotcheck((Point)selectedObject);
+            }
+            this.refresh();
         } else if (selectedObject instanceof Knot){
             selectedObjects.clear();
             selectedObjects.add(selectedObject);
             te.getPolygon().setDrawKnotcheck(((Knot)selectedObject).getPoint());
+            this.update(this.getGraphics());
         } else if (selectedObject == null) {
             if (selectedObjects.size() == 1){
                 
@@ -329,8 +335,8 @@ public class DrawingPanel extends javax.swing.JPanel {
             } else {
                 selectedObjects.clear();
             }
+            this.update(this.getGraphics());
         }
-        this.refresh();
     }
 
     private void mouseClickSelectMode(java.awt.event.MouseEvent evt) {
