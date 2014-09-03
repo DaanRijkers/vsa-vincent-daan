@@ -62,10 +62,6 @@ public class Point implements IDrawable, Serializable {
         return false;
     }
 
-    public void drawKnotCheckField(ArrayList<Knot> knots) {
-
-    }
-
     @Override
     public void draw(Graphics2D g, double scale) {
         g.setColor((selected) ? SELECTED_COLOR : (highlighted) ? HIGHLIGHTED_COLOR : NORMAL_COLOR);
