@@ -290,6 +290,7 @@ public class Polygon implements IDrawable, Serializable {
     
     public void drawKnotCheck(Graphics2D g, double scale) {
         Point pointK = null;
+        Double size = null;
         List<Line> outerLines = new ArrayList<>();
         List<Triangle> knotTriangles = new ArrayList<>();
         
@@ -307,22 +308,29 @@ public class Polygon implements IDrawable, Serializable {
         }
         for (Triangle t : knotTriangles) {
             for (Line l : t.getLines()) {
-                if((l.getType() == 0 || l.getType() == 1) && (l.getStartPoint() == pointK || l.getEndPoint() == pointK))
-                    outerLines.add(l);
+                if(l.getStartPoint() == pointK || l.getEndPoint() == pointK){
+                    double length = KnotService.lineLength(l);
+                    System.out.println("Line length: "+length);
+                    if(size == null || length < size)
+                        size = length;
+                    
+                    if(l.getType() == 0 || l.getType() == 1)
+                        outerLines.add(l);
+                }
             }
         }
         if(outerLines.isEmpty()){
-            drawInnerKnotCheck(pointK, knotTriangles, g, scale);
+            drawInnerKnotCheck(pointK, (int)Math.round(size), knotTriangles, g, scale);
         } else {
-            drawEdgeKnotCheck(pointK, outerLines, knotTriangles, g, scale);
+            drawEdgeKnotCheck(pointK, (int)Math.round(size), outerLines, knotTriangles, g, scale);
         }
     }
     
-    private void drawInnerKnotCheck(Point pointK, List<Triangle> knotTriangles, Graphics2D g, double scale){
+    private void drawInnerKnotCheck(Point pointK, int size, List<Triangle> knotTriangles, Graphics2D g, double scale){
         System.out.println("drawing inner knot check");
     }
     
-    private void drawEdgeKnotCheck(Point pointK, List<Line> outerLines,  List<Triangle> knotTriangles, Graphics2D g, double scale){
+    private void drawEdgeKnotCheck(Point pointK, int size, List<Line> outerLines, List<Triangle> knotTriangles, Graphics2D g, double scale){
         double totalAngle = 0;
         for (Triangle t : knotTriangles){
             List<Line> angledLines = new ArrayList<>();
@@ -337,7 +345,6 @@ public class Polygon implements IDrawable, Serializable {
         double heading2 = KnotService.lineHeading(pointK, outerLines.get(1));
         double startAngle = 0;
         double arcAngle = 0;
-        double size = 500;
         if(totalAngle > 180){
             arcAngle = 360 - totalAngle;
             if (Math.round(heading1 + arcAngle) == Math.round(heading2) || 
@@ -351,10 +358,8 @@ public class Polygon implements IDrawable, Serializable {
             arcAngle = totalAngle;
             if (Math.round(heading1 - arcAngle) == Math.round(heading2) || 
                     Math.round(heading1 + (360-arcAngle)) == Math.round(heading2)){
-                System.out.println("selected line1: " + heading1);
                 startAngle = heading1 + 180;
             } else {
-                System.out.println("selected line2: " + heading2);
                 startAngle = heading2 + 180;
             }
         }
@@ -362,9 +367,8 @@ public class Polygon implements IDrawable, Serializable {
         startAngle = -(startAngle - 90);
         
         g.setColor(KnotService.specialGreen);
-        g.fillArc(pointK.getX()-(int)Math.round(size/2), pointK.getY()-(int)Math.round(size/2), 
-                (int)Math.round(size), (int)Math.round(size), (int)Math.round(startAngle), (int)Math.round(arcAngle));
-        System.out.println("drew cone, start angle: " + startAngle + " arc angle: " + arcAngle);
+        g.fillArc(pointK.getX()-(size/2), pointK.getY()-(size/2),
+                size, size, (int)Math.round(startAngle), (int)Math.round(arcAngle));
     }
 
     @Override
