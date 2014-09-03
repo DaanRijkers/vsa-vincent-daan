@@ -43,12 +43,12 @@ public class Knot implements IDrawable, Serializable {
         this.previous = prev;
     }
     
-    public void drawKnotCheckField(ArrayList<Knot> knots){
-        knots.add(this);
-        if(previous instanceof Knot)
-            ((Knot)previous).drawKnotCheckField(knots);
-        else
-            ((Point)previous).drawKnotCheckField(knots);
+    public Point getPoint(){
+        if(previous instanceof Point) {
+            return (Point)previous;
+        } else {
+            return ((Knot)previous).getPoint();
+        }
     }
 
     @Override

@@ -61,6 +61,9 @@ public class DrawingPanel extends javax.swing.JPanel {
     private boolean dragVis;
     private List<IDrawable> selectedObjects;
     private Point startLinePoint;
+    
+    private BufferedImage screenShot;
+    
     //private Triangle selectedTriangle;
 
     /**
@@ -172,8 +175,13 @@ public class DrawingPanel extends javax.swing.JPanel {
     }
 
     public void refresh() {
+        this.screenShot = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB);
+        
         this.getGraphics().clearRect(0, 0, this.getWidth(), this.getHeight());
         this.update(this.getGraphics());
+        
+        screenShot.getGraphics().clearRect(0, 0, this.getWidth(), this.getHeight());
+        this.paint(screenShot.getGraphics());
     }
 
     private void renderDraggedSelection() {
@@ -300,26 +308,29 @@ public class DrawingPanel extends javax.swing.JPanel {
 
         IDrawable selectedObject = te.getPolygon().checkSelection(evt.getX(), evt.getY(), false);
         
-        if (selectedObject instanceof Point || selectedObject instanceof Knot) {
+        if (selectedObject instanceof Point) {
             selectedObjects.clear();
             selectedObjects.add(selectedObject);
-            te.getPolygon().setDrawKnotcheck(true);
+            te.getPolygon().setDrawKnotcheck((Point)selectedObject);
+        } else if (selectedObject instanceof Knot){
+            selectedObjects.clear();
+            selectedObjects.add(selectedObject);
+            te.getPolygon().setDrawKnotcheck(((Knot)selectedObject).getPoint());
         } else if (selectedObject == null) {
             if (selectedObjects.size() == 1){
-                BufferedImage img = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB);
-                this.paint(img.createGraphics());
-                Color rColor = new Color(getGraphicsConfiguration().getColorModel().getRGB(img.getRGB(evt.getX(), evt.getY())));
+                
+                Color rColor = new Color(getGraphicsConfiguration().getColorModel().getRGB(screenShot.getRGB(evt.getX(), evt.getY())));
+                
                 System.out.println("Pixelcolor: "+rColor);
+                
                 if(rColor.equals(KnotService.specialGreen))
                     te.getPolygon().addKnot(evt.getX(), evt.getY(), selectedObjects.get(0));
                 selectedObjects.clear();
-                te.getPolygon().setDrawKnotcheck(false);
             } else {
                 selectedObjects.clear();
-                te.getPolygon().setDrawKnotcheck(false);
             }
         }
-        this.update(this.getGraphics());
+        this.refresh();
     }
 
     private void mouseClickSelectMode(java.awt.event.MouseEvent evt) {
