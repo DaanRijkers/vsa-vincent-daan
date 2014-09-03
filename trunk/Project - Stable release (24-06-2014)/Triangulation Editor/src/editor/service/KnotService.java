@@ -20,28 +20,24 @@ public class KnotService {
     
     public static double angleDegreesBetween2Lines(Point p1, Line l1, Line l2){
         
-        Point p2;
-        Point p3;
-        if(l1.getStartPoint() == p1)
-            p2 = l1.getEndPoint();
-        else
-            p2 = l1.getStartPoint();
+        Double heading1 = lineHeading(p1, l1);
+        Double heading2 = lineHeading(p1, l2);
+        Double result1;
+        Double result2;
         
-        if(l2.getStartPoint() == p1)
-            p3 = l2.getEndPoint();
-        else
-            p3 = l2.getStartPoint();
+        if(heading1 > heading2){
+            result1 = heading1;
+            result2 = heading2;
+        } else {
+            result1 = heading2;
+            result2 = heading1;
+        }
         
-        double angle1 = Math.atan2(p2.getX()- p1.getX(), 
-                p2.getY()- p1.getY());
-        double angle2 = Math.atan2(p1.getX()- p3.getX(), 
-                p1.getY()- p3.getY());
-        double result = (angle1 - angle2) * 57.2957795;
-        if(result < 0)
-            result = -result;
-        if (result > 180)
-            result = result - 180;
-        return result;
+        if (result1 - result2 > 180) {
+            return 360 - result1 + result2;
+        } else {
+            return result1 - result2;
+        }
     }
     
     public static double lineHeading(Point p1, Line l1){
@@ -54,7 +50,7 @@ public class KnotService {
         
         double heading = Math.atan2(p1.getX()- p2.getX(), 
                 p1.getY()- p2.getY());
-        heading = heading * 57.2957795;
+        heading = Math.toDegrees(heading);
         if(heading < 0) {
             heading = -heading;
         } else {

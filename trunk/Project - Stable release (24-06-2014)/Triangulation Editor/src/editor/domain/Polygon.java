@@ -307,7 +307,7 @@ public class Polygon implements IDrawable, Serializable {
         }
         for (Triangle t : knotTriangles) {
             for (Line l : t.getLines()) {
-                if(l.getType() == 0 || l.getType() == 1)
+                if((l.getType() == 0 || l.getType() == 1) && (l.getStartPoint() == pointK || l.getEndPoint() == pointK))
                     outerLines.add(l);
             }
         }
@@ -332,27 +332,38 @@ public class Polygon implements IDrawable, Serializable {
                 }
             }
             totalAngle += KnotService.angleDegreesBetween2Lines(pointK, angledLines.get(0), angledLines.get(1));
-            System.out.println("Total Angle of triangles: " + totalAngle);
         }
         double heading1 = KnotService.lineHeading(pointK, outerLines.get(0));
         double heading2 = KnotService.lineHeading(pointK, outerLines.get(1));
         double startAngle = 0;
         double arcAngle = 0;
+        double size = 500;
         if(totalAngle > 180){
-            if (heading1 < heading2){
-                startAngle = heading2 - 90;
-            } else {
-                startAngle = heading1 - 90;
-            }
             arcAngle = 360 - totalAngle;
+            if (Math.round(heading1 + arcAngle) == Math.round(heading2) || 
+                    Math.round(heading1 -totalAngle) == Math.round(heading2)){
+                startAngle = heading2;
+            } else {
+                startAngle = heading1;
+            }
+            
         } else {
-            if (heading2 - heading1 > 180){
-                startAngle = heading1 - 90;
-                arcAngle = totalAngle;
+            arcAngle = totalAngle;
+            if (Math.round(heading1 - arcAngle) == Math.round(heading2) || 
+                    Math.round(heading1 + (360-arcAngle)) == Math.round(heading2)){
+                System.out.println("selected line1: " + heading1);
+                startAngle = heading1 + 180;
+            } else {
+                System.out.println("selected line2: " + heading2);
+                startAngle = heading2 + 180;
             }
         }
+        
+        startAngle = -(startAngle - 90);
+        
         g.setColor(KnotService.specialGreen);
-        g.fillArc(pointK.getX()-50, pointK.getY()-50, 100, 100, (int)Math.round(startAngle), (int)Math.round(arcAngle));
+        g.fillArc(pointK.getX()-(int)Math.round(size/2), pointK.getY()-(int)Math.round(size/2), 
+                (int)Math.round(size), (int)Math.round(size), (int)Math.round(startAngle), (int)Math.round(arcAngle));
         System.out.println("drew cone, start angle: " + startAngle + " arc angle: " + arcAngle);
     }
 
