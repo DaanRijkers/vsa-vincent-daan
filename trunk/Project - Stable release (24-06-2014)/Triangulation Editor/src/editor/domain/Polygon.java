@@ -7,6 +7,7 @@ package editor.domain;
 
 import editor.service.KnotService;
 import editor.service.MessageService;
+import editor.service.Options;
 import editor.service.TriangulateService;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -387,7 +388,7 @@ public class Polygon implements IDrawable, Serializable {
             t.draw(g, scale);
         }
         
-        if(knotCheck != null)
+        if(knotCheck != null && Options.isShowKnotPlacementCheck())
             drawKnotCheck(g, scale);
 
         for (IDrawable l : this.lines) {

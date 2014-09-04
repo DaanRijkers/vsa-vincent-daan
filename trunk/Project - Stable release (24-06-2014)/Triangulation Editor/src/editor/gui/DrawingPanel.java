@@ -13,6 +13,7 @@ import editor.domain.Mode;
 import editor.domain.Point;
 import editor.domain.Triangle;
 import editor.service.KnotService;
+import editor.service.Options;
 import editor.service.PolygonService;
 import java.awt.AWTException;
 import java.awt.BasicStroke;
@@ -323,15 +324,14 @@ public class DrawingPanel extends javax.swing.JPanel {
             te.getPolygon().setDrawKnotcheck(((Knot)selectedObject).getPoint());
             this.update(this.getGraphics());
         } else if (selectedObject == null) {
-            if (selectedObjects.size() == 1){
-                
+            if (selectedObjects.size() == 1 && Options.isShowKnotPlacementCheck()){
                 Color rColor = new Color(getGraphicsConfiguration().getColorModel().getRGB(screenShot.getRGB(evt.getX(), evt.getY())));
-                
                 System.out.println("Pixelcolor: "+rColor);
-                
                 if(rColor.equals(KnotService.specialGreen))
                     te.getPolygon().addKnot(evt.getX(), evt.getY(), selectedObjects.get(0));
                 selectedObjects.clear();
+            } else if(selectedObjects.size() == 1){
+                te.getPolygon().addKnot(evt.getX(), evt.getY(), selectedObjects.get(0));
             } else {
                 selectedObjects.clear();
             }

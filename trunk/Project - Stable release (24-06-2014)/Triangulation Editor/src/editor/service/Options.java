@@ -16,6 +16,7 @@ public class Options {
     private static boolean showScale = true;
     private static boolean showPointLocation = true;
     private static boolean showTriangleNumber = true;
+    private static boolean showKnotPlacementCheck = true;
     
     // Options for auto-triangulating
     private static int NumberOfRayChecks = 8;
@@ -94,6 +95,12 @@ public class Options {
     public static void setShowTriangleNumber(boolean showTriangleNumber) {
         Options.showTriangleNumber = showTriangleNumber;
     }
-    
-    
+
+    public static boolean isShowKnotPlacementCheck() {
+        return showKnotPlacementCheck;
+    }
+
+    public static void setShowKnotPlacementCheck(boolean showKnotPlacementCheck) {
+        Options.showKnotPlacementCheck = showKnotPlacementCheck;
+    }
 }

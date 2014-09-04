@@ -124,6 +124,7 @@ public class EditorForm extends javax.swing.JFrame {
         menuToolsStick = new javax.swing.JCheckBoxMenuItem();
         menuToolsOptions = new javax.swing.JMenuItem();
         menuToolsAbout = new javax.swing.JMenuItem();
+        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Triangulation Editor");
@@ -352,6 +353,15 @@ public class EditorForm extends javax.swing.JFrame {
         });
         menuTools.add(menuToolsAbout);
 
+        jCheckBoxMenuItem1.setSelected(true);
+        jCheckBoxMenuItem1.setLabel("Knot placement check");
+        jCheckBoxMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem1ActionPerformed(evt);
+            }
+        });
+        menuTools.add(jCheckBoxMenuItem1);
+
         jMenuBar1.add(menuTools);
 
         setJMenuBar(jMenuBar1);
@@ -518,6 +528,11 @@ public class EditorForm extends javax.swing.JFrame {
         panelGrid.refresh();
     }//GEN-LAST:event_viewMenuNumbersActionPerformed
 
+    private void jCheckBoxMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1ActionPerformed
+        Options.setShowKnotPlacementCheck(!Options.isShowKnotPlacementCheck());
+        panelGrid.refresh();
+    }//GEN-LAST:event_jCheckBoxMenuItem1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -558,6 +573,7 @@ public class EditorForm extends javax.swing.JFrame {
     private javax.swing.JToggleButton btnLine;
     private javax.swing.JToggleButton btnPoint;
     private javax.swing.ButtonGroup grpRadioButtons;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JLabel lblCoordinates;
     private javax.swing.JMenu menuEdit;
