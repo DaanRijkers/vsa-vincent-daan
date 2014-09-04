@@ -92,4 +92,15 @@ public class KnotServiceTest {
         assertEquals(result1, 100, 0.0);
     }
     
+    @Test
+    public void testCalcPointByBearingAndDistance() {
+        System.out.println("calcPointByBearingAndDistance");
+        
+        Point start = new Point(110, 80);
+        double distance = 94;
+        double heading = 278;
+        
+        Line result = KnotService.calcPointByBearingAndDistance(start, distance, heading);
+        
+    }
 }

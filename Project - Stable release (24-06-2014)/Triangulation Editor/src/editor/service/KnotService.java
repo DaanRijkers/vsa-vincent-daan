@@ -69,4 +69,16 @@ public class KnotService {
         
         return result;
     }
+    
+    public static Line calcPointByBearingAndDistance(Point p1, double distance, double heading){
+        
+        double bearing = Math.toRadians(heading);
+        
+        int finalX = p1.getX() + (int)Math.round(distance * Math.sin(bearing));
+        int finalY = p1.getY() -(int)Math.round(distance * Math.cos(bearing));
+        
+        Point dest = new Point(finalX, finalY);
+        System.out.println("finalX: "+finalX+" finalY: "+finalY);
+        return new Line(p1, dest, 2);
+    }
 }

@@ -377,9 +377,10 @@ public class DrawingPanel extends javax.swing.JPanel {
 
     public void setMode(Mode mode) {
         this.mode = mode;
+        te.getPolygon().setDrawKnotcheck(null);
         te.getPolygon().checkSelection(0, 0, false);
         //selectedTriangle = null;
-        this.update(this.getGraphics());
+        this.refresh();
     }
 
     public void setLineMode(int mode) {
