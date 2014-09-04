@@ -311,10 +311,25 @@ public class Polygon implements IDrawable, Serializable {
                 }
             }
         }
+        if(knotTriangles.isEmpty() || outerLines.size() < 2)
+            return;
+        
         if(outerLines.isEmpty()){
             drawInnerKnotCheck((int)Math.round(size), knotTriangles, g, scale);
         } else {
             drawEdgeKnotCheck((int)Math.round(size), outerLines, knotTriangles, g, scale);
+        }
+        g.setColor(Color.red);
+        for (Triangle t : knotTriangles) {
+            for (Line l : t.getLines()){
+                if(l.getStartPoint() == knotCheck || l.getEndPoint() == knotCheck){
+                    double heading = KnotService.lineHeading(knotCheck, l) +180;
+                    if (heading > 360)
+                        heading = heading - 360;
+                    Line line = KnotService.calcPointByBearingAndDistance(knotCheck, size/2, heading);
+                    g.drawLine(line.getStartPoint().getX(), line.getStartPoint().getY(), line.getEndPoint().getX(), line.getEndPoint().getY());
+                }
+            }
         }
     }
     
